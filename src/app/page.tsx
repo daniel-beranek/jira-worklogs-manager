@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
 	Input,
 	Table,
@@ -14,18 +15,15 @@ import {
 	type RangeValue,
 	getKeyValue
 } from '@nextui-org/react';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useEffect, useMemo, useState } from 'react';
 import { endOfMonth, getLocalTimeZone, startOfMonth, today } from '@internationalized/date';
+import { fetchWorklogs } from '@/app/actions';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export default function App() {
-	const [apiStorage, setApiStorage] = useLocalStorage('api', '');
-	const [userStorage, setUserStorage] = useLocalStorage('user', '');
-	const [tokenStorage, setTokenStorage] = useLocalStorage('token', '');
-
-	const [api, setApi] = useState(apiStorage);
-	const [user, setUser] = useState(userStorage);
-	const [token, setToken] = useState(tokenStorage);
+	const [api, setApi] = useState('');
+	const [user, setUser] = useState('');
+	const [token, setToken] = useState('');
 	const [dateRange, setDateRange] = useState<RangeValue<DateValue>>({
 		start: startOfMonth(today(getLocalTimeZone())),
 		end: endOfMonth(today(getLocalTimeZone()))
@@ -34,62 +32,40 @@ export default function App() {
 
 	const [worklogs, setWorklogs] = useState<unknown[]>([]);
 
+	const [apiStorage, setApiStorage] = useLocalStorage('api', '');
+	const [userStorage, setUserStorage] = useLocalStorage('user', '');
+	const [tokenStorage, setTokenStorage] = useLocalStorage('token', '');
+
+	useEffect(() => {
+		setApi(apiStorage);
+	}, [apiStorage]);
+	useEffect(() => {
+		setUser(userStorage);
+	}, [userStorage]);
+	useEffect(() => {
+		setToken(tokenStorage);
+	}, [tokenStorage]);
+
 	useEffect(() => {
 		console.log(worklogs);
 	}, [worklogs]);
 
 	const handleFetch = async () => {
 		setLoading(true);
-		const worklogsBuffer: unknown[] = [];
-		try {
-			const issuesWithRequestedWorklogsRes = await fetch(
-				`https://${api}/search?jql=worklogAuthor = "${user}" AND worklogDate > ${dateRange.start.toString()} AND worklogDate < ${dateRange.end.toString()}`,
-				{
-					headers: { Authorization: `Bearer ${token}` }
+
+		const worklogsBuffer = await fetchWorklogs(api, user, token, dateRange.start.toString(), dateRange.end.toString());
+
+		setWorklogs(
+			worklogsBuffer.reduce<any>((acc, v) => {
+				const worklogDate = new Date(v.started).toLocaleDateString();
+				if (!acc[worklogDate]) {
+					acc[worklogDate] = [];
 				}
-			);
-			const { startAt, maxResults, total, issues } = await issuesWithRequestedWorklogsRes.json();
-			if (total > maxResults) {
-				console.warn('Warning: total > maxResults');
-			}
+				acc[worklogDate].push(v);
+				return acc;
+			}, {})
+		);
 
-			await Promise.all(
-				issues.map(async (issue) => {
-					// this call should accept query params to filter the results by date and pagination
-					// (https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-get)
-					// however it does not seem to work
-					const issueWorklogsRes = await fetch(`jira-proxy/issue/${issue.key}/worklog`, {
-						headers: { Authorization: `Bearer ${token}` }
-					});
-					const { startAt, maxResults, total, worklogs: issueWorklogs } = await issueWorklogsRes.json();
-					if (total > maxResults) {
-						console.warn('Warning: total > maxResults');
-					}
-
-					worklogsBuffer.push(
-						...issueWorklogs.filter(
-							(issueWorklog) =>
-								issueWorklog.author.name === user &&
-								Date.parse(issueWorklog.started) > Date.parse(dateRange.start.toString()) &&
-								Date.parse(issueWorklog.started) < Date.parse(dateRange.end.toString())
-						)
-					);
-				})
-			);
-
-			setWorklogs(
-				worklogsBuffer.reduce<any>((acc, v) => {
-					const worklogDate = new Date(v.started).toLocaleDateString();
-					if (!acc[worklogDate]) {
-						acc[worklogDate] = [];
-					}
-					acc[worklogDate].push(v);
-					return acc;
-				}, {})
-			);
-		} catch (error) {
-			console.error(error);
-		}
 		setLoading(false);
 	};
 
@@ -113,8 +89,16 @@ export default function App() {
 			return {
 				key: date,
 				date,
-				timeSpent: worklogs.reduce((acc, v) => acc + v.timeSpentSeconds, 0),
-				worklogs: worklogs.map((worklog) => worklog.id).join()
+				timeSpent: `${worklogs.reduce((acc, v) => acc + v.timeSpentSeconds, 0) / (60 * 60)}h`,
+				worklogs: (
+					<ul>
+						{worklogs.map((worklog) => (
+							<li key={worklog.id}>
+								<Link href={worklog.self}>{worklog.id}</Link>
+							</li>
+						))}
+					</ul>
+				)
 			};
 		});
 	}, [worklogs]);
