@@ -2,8 +2,9 @@
   "name": "jira-worklogs-manager",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3333",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
