@@ -40,3 +40,6 @@ bun.lockb
 
 # IDEs
 .idea
+
+# env files
+.env
