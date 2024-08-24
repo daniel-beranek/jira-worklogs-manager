@@ -7,7 +7,8 @@
     "dev": "next dev --port 3333",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-jira-types": "openapi-typescript https://dac-static.atlassian.com/cloud/jira/platform/swagger.v3.json -o src/types/jira.d.ts"
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.6",
@@ -23,6 +24,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.6",
+    "openapi-typescript": "^7.3.0",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
