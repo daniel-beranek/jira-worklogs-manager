@@ -12,16 +12,23 @@ export const metadata: Metadata = {
 };
 
 export default function AppLayout({
-	children
+	children,
+	configuration,
+	worklogs
 }: Readonly<{
 	children: ReactNode;
+	configuration: ReactNode;
+	worklogs: ReactNode;
 }>) {
 	return (
 		<html
 			lang="en"
 			className="light">
 			<body className={inter.className}>
-				<AppProviders>{children}</AppProviders>
+				<AppProviders>
+					{configuration}
+					{worklogs}
+				</AppProviders>
 			</body>
 		</html>
 	);
