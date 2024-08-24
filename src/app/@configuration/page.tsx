@@ -2,74 +2,77 @@
 
 import { Button, Input, Spinner } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
-import { setCookie, getCookie } from '@/actions/cookies';
+import { setEncryptedCookie, getDecryptedCookie } from '@/actions/cookies';
 import { useDebounce } from '@/hooks/useDebounce';
+import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 
 const ConfigurationPage = () => {
-	const [api, setApi] = useState('');
+	const [url, setUrl] = useState('');
 	const [user, setUser] = useState('');
 	const [token, setToken] = useState('');
 	useEffect(() => {
 		(async () => {
-			setApi((await getCookie('api')) ?? '');
-			setUser((await getCookie('user')) ?? '');
-			setToken((await getCookie('token')) ?? '');
+			setUrl((await getDecryptedCookie('url')) ?? '');
+			setUser((await getDecryptedCookie('user')) ?? '');
+			setToken((await getDecryptedCookie('token')) ?? '');
 		})();
 	}, []);
 
-	const [debouncedApi, debouncingApi] = useDebounce(api);
+	const [debouncedUrl, debouncingUrl] = useDebounce(url);
 	const [debouncedUser, debouncingUser] = useDebounce(user);
 	const [debouncedToken, debouncingToken] = useDebounce(token);
 
-	const [apiDescription, setApiDescription] = useState('');
+	const [urlDescription, setUrlDescription] = useState('');
 	const [userDescription, setUserDescription] = useState('');
 	const [tokenDescription, setTokenDescription] = useState('');
 	useEffect(() => {
 		(async () => {
-			if (debouncedApi !== (await getCookie('api'))) setApiDescription('Value not stored, submit the value.');
-			else setApiDescription('');
+			if (debouncedUrl !== (await getDecryptedCookie('url'))) setUrlDescription('Value not stored, submit the value.');
+			else setUrlDescription('');
 		})();
-	}, [debouncedApi]);
+	}, [debouncedUrl]);
 	useEffect(() => {
 		(async () => {
-			if (debouncedUser !== (await getCookie('user'))) setUserDescription('Value not stored, submit the value.');
+			if (debouncedUser !== (await getDecryptedCookie('user'))) setUserDescription('Value not stored, submit the value.');
 			else setUserDescription('');
 		})();
 	}, [debouncedUser]);
 	useEffect(() => {
 		(async () => {
-			if (debouncedToken !== (await getCookie('token'))) setTokenDescription('Value not stored, submit the value.');
+			if (debouncedToken !== (await getDecryptedCookie('token'))) setTokenDescription('Value not stored, submit the value.');
 			else setTokenDescription('');
 		})();
 	}, [debouncedToken]);
 
 	const handleSubmit = async (name: string, value: string) => {
-		await setCookie(name, value);
-		const res = await getCookie(name);
-		if (res === api) setApiDescription('');
+		await setEncryptedCookie(name, value);
+		const res = await getDecryptedCookie(name);
+		if (res === url) setUrlDescription('');
 		if (res === user) setUserDescription('');
 		if (res === token) setTokenDescription('');
 	};
+
+	const [isTokenVisible, setIsTokenVisible] = useState(false);
 
 	return (
 		<div>
 			<Input
 				type="url"
-				label="API"
+				label="URL"
 				placeholder="nextui.org"
 				startContent={
 					<div className="pointer-events-none flex items-center">
 						<span className="text-small text-default-400">https://</span>
 					</div>
 				}
-				value={api}
-				onChange={(e) => setApi(e.target.value)}
-				onKeyDown={(e) => e.key === 'Enter' && handleSubmit('api', api)}
-				description={!debouncingApi && apiDescription}
+				value={url}
+				onChange={(e) => setUrl(e.target.value)}
+				onKeyDown={(e) => e.key === 'Enter' && handleSubmit('url', url)}
+				description={!debouncingUrl && urlDescription}
 			/>
-			{debouncingApi && <Spinner />}
+			{debouncingUrl && <Spinner />}
 			<Button
-				onClick={() => handleSubmit('api', api)}
+				onClick={() => handleSubmit('url', url)}
 				color="primary">
 				Submit
 			</Button>
@@ -91,13 +94,26 @@ const ConfigurationPage = () => {
 			</Button>
 
 			<Input
-				type="text"
+				type={isTokenVisible ? 'text' : 'password'}
 				label="Token"
 				placeholder="abcdefgh"
 				value={token}
 				onChange={(e) => setToken(e.target.value)}
 				onKeyDown={(e) => e.key === 'Enter' && handleSubmit('token', token)}
 				description={!debouncingToken && tokenDescription}
+				endContent={
+					<button
+						className="focus:outline-none"
+						type="button"
+						onClick={() => setIsTokenVisible((prevValue) => !prevValue)}
+						aria-label="toggle password visibility">
+						{isTokenVisible ? (
+							<EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
+						) : (
+							<EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
+						)}
+					</button>
+				}
 			/>
 			{debouncingToken && <Spinner />}
 			<Button
