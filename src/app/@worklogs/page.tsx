@@ -13,7 +13,7 @@ import {
 	TableHeader,
 	TableRow
 } from '@nextui-org/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { endOfMonth, getLocalTimeZone, startOfMonth, today } from '@internationalized/date';
 import { getIssuesContainingRequestedWorklogs, getRequestedWorklogs } from './actions';
 import Link from 'next/link';
@@ -24,8 +24,8 @@ const WorklogsTable = () => {
 		end: endOfMonth(today(getLocalTimeZone()))
 	});
 
-	const [issues, setIssues] = useState<unknown[]>([]);
-	const [worklogs, setWorklogs] = useState<Record<string, unknown>>({});
+	const [issues, setIssues] = useState<Awaited<ReturnType<typeof getIssuesContainingRequestedWorklogs>>>([]);
+	const [worklogs, setWorklogs] = useState<Awaited<ReturnType<typeof getRequestedWorklogs>>>({});
 
 	const columns = [
 		{
@@ -47,12 +47,12 @@ const WorklogsTable = () => {
 			return {
 				key: date,
 				date,
-				timeSpent: `${worklogs.reduce((acc, v) => acc + v.timeSpentSeconds, 0) / (60 * 60)}h`,
+				timeSpent: `${worklogs.reduce((acc, v) => acc + (v.timeSpentSeconds ?? 0), 0) / (60 * 60)}h`,
 				worklogs: (
 					<ul>
 						{worklogs.map((worklog) => (
 							<li key={worklog.id}>
-								<Link href={worklog.self}>{worklog.id}</Link>
+								<Link href={worklog.self ?? '#'}>{worklog.id}</Link>
 							</li>
 						))}
 					</ul>
@@ -72,12 +72,10 @@ const WorklogsTable = () => {
 
 			<Button
 				onClick={async () => {
-					const hello = await getIssuesContainingRequestedWorklogs(dateRange.start.toString(), dateRange.end.toString());
-					setIssues(hello);
-					console.log(hello);
-					const bye = await getRequestedWorklogs(dateRange.start.toString(), dateRange.end.toString(), hello);
-					setWorklogs(bye);
-					console.log(bye);
+					const issuesRes = await getIssuesContainingRequestedWorklogs(dateRange.start.toString(), dateRange.end.toString());
+					setIssues(issuesRes);
+					const worklogsRes = await getRequestedWorklogs(dateRange.start.toString(), dateRange.end.toString(), issuesRes);
+					setWorklogs(worklogsRes);
 				}}
 				color="primary">
 				Fetch
