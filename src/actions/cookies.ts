@@ -2,7 +2,7 @@
 
 import 'server-only';
 import { cookies } from 'next/headers';
-import { jwtDecrypt, jwtVerify, SignJWT } from 'jose';
+import { jwtVerify, SignJWT } from 'jose';
 
 const cookieSecret = process.env.COOKIE_SECRET;
 if (typeof cookieSecret === 'undefined') throw new Error('Missing COOKIE_SECRET env variable');
