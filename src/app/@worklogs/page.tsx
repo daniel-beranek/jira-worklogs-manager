@@ -18,7 +18,7 @@ import { endOfMonth, getLocalTimeZone, startOfMonth, today } from '@internationa
 import { getIssuesContainingRequestedWorklogs, getRequestedWorklogs } from './actions';
 import Link from 'next/link';
 
-const WorklogsTable = () => {
+const WorklogsPage = () => {
 	const [dateRange, setDateRange] = useState<RangeValue<DateValue>>({
 		start: startOfMonth(today(getLocalTimeZone())),
 		end: endOfMonth(today(getLocalTimeZone()))
@@ -90,4 +90,4 @@ const WorklogsTable = () => {
 		</div>
 	);
 };
-export default WorklogsTable;
+export default WorklogsPage;
