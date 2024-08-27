@@ -5,7 +5,6 @@ import { Button, CardBody, Card } from '@nextui-org/react';
 const AppError = ({ error, reset }: Readonly<{ error: Error & { digest?: string }; reset: () => void }>) => {
 	useEffect(() => {
 		console.error(error);
-		console.log('digest:::', error.digest);
 	}, [error]);
 
 	return (
