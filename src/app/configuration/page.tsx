@@ -7,14 +7,22 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 
 const ConfigurationPage = () => {
+	const [isLoading, setIsLoading] = useState(true);
+
 	const [url, setUrl] = useState('');
 	const [user, setUser] = useState('');
 	const [token, setToken] = useState('');
 	useEffect(() => {
 		(async () => {
-			setUrl((await getDecryptedCookie('url')) ?? '');
-			setUser((await getDecryptedCookie('user')) ?? '');
-			setToken((await getDecryptedCookie('token')) ?? '');
+			const urlCookieRes = await getDecryptedCookie({ name: 'url' });
+			const userCookieRes = await getDecryptedCookie({ name: 'user' });
+			const tokenCookieRes = await getDecryptedCookie({ name: 'token' });
+
+			if (urlCookieRes.status === 'success') setUrl(urlCookieRes.data);
+			if (userCookieRes.status === 'success') setUser(userCookieRes.data);
+			if (tokenCookieRes.status === 'success') setToken(tokenCookieRes.data);
+
+			setIsLoading(false);
 		})();
 	}, []);
 
@@ -27,39 +35,45 @@ const ConfigurationPage = () => {
 	const [tokenDescription, setTokenDescription] = useState('');
 	useEffect(() => {
 		(async () => {
-			if (debouncedUrl !== (await getDecryptedCookie('url'))) setUrlDescription('Value not stored, submit the value.');
-			else setUrlDescription('');
+			const urlCookieRes = await getDecryptedCookie({ name: 'url' });
+			if (urlCookieRes.status === 'success' && urlCookieRes.data === debouncedUrl) setUrlDescription('');
+			else setUrlDescription('Value not stored, submit the value.');
 		})();
 	}, [debouncedUrl]);
 	useEffect(() => {
 		(async () => {
-			if (debouncedUser !== (await getDecryptedCookie('user'))) setUserDescription('Value not stored, submit the value.');
-			else setUserDescription('');
+			const userCookieRes = await getDecryptedCookie({ name: 'user' });
+			if (userCookieRes.status === 'success' && userCookieRes.data === debouncedUser) setUserDescription('');
+			else setUserDescription('Value not stored, submit the value.');
 		})();
 	}, [debouncedUser]);
 	useEffect(() => {
 		(async () => {
-			if (debouncedToken !== (await getDecryptedCookie('token'))) setTokenDescription('Value not stored, submit the value.');
-			else setTokenDescription('');
+			const tokenCookieRes = await getDecryptedCookie({ name: 'token' });
+			if (tokenCookieRes.status === 'success' && tokenCookieRes.data === debouncedToken) setTokenDescription('');
+			else setTokenDescription('Value not stored, submit the value.');
 		})();
 	}, [debouncedToken]);
 
 	const handleSubmit = async (name: string, value: string) => {
-		await setEncryptedCookie(name, value);
-		const res = await getDecryptedCookie(name);
-		if (res === url) setUrlDescription('');
-		if (res === user) setUserDescription('');
-		if (res === token) setTokenDescription('');
+		await setEncryptedCookie({ name, value });
+		const res = await getDecryptedCookie({ name });
+		if (res.status !== 'success') return;
+		if (res.data === url) setUrlDescription('');
+		if (res.data === user) setUserDescription('');
+		if (res.data === token) setTokenDescription('');
 	};
 
 	const [isTokenVisible, setIsTokenVisible] = useState(false);
+
+	if (isLoading) return <Spinner />;
 
 	return (
 		<div>
 			<Input
 				type="url"
 				label="URL"
-				placeholder="nextui.org"
+				placeholder="your.jira.com"
 				startContent={
 					<div className="pointer-events-none flex items-center">
 						<span className="text-small text-default-400">https://</span>
@@ -80,7 +94,7 @@ const ConfigurationPage = () => {
 			<Input
 				type="text"
 				label="User"
-				placeholder="John Doe"
+				placeholder="Your Jira Username"
 				value={user}
 				onChange={(e) => setUser(e.target.value)}
 				onKeyDown={(e) => e.key === 'Enter' && handleSubmit('user', user)}
@@ -96,7 +110,7 @@ const ConfigurationPage = () => {
 			<Input
 				type={isTokenVisible ? 'text' : 'password'}
 				label="Token"
-				placeholder="abcdefgh"
+				placeholder="Your Jira Token"
 				value={token}
 				onChange={(e) => setToken(e.target.value)}
 				onKeyDown={(e) => e.key === 'Enter' && handleSubmit('token', token)}
