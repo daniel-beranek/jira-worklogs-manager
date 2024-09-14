@@ -1,68 +1,77 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { DateValue, RangeValue } from '@nextui-org/react';
-import { endOfWeek, getLocalTimeZone, startOfWeek, today as todayInternationalized } from '@internationalized/date';
+import {
+	endOfMonth,
+	endOfWeek,
+	getLocalTimeZone,
+	startOfMonth,
+	startOfWeek,
+	today as todayInternationalized
+} from '@internationalized/date';
 import { useLocale } from '@react-aria/i18n';
 
+type PredefinedDateRanges = 'today' | 'thisWeek' | 'thisMonth' | 'last15Days' | 'last30Days';
 export const useDateRange = () => {
 	const { locale } = useLocale();
 
-	const today = {
-		start: todayInternationalized(getLocalTimeZone()),
-		end: todayInternationalized(getLocalTimeZone())
+	const predefinedDateRanges = useMemo<Record<PredefinedDateRanges, RangeValue<DateValue>>>(
+		() => ({
+			today: {
+				start: todayInternationalized(getLocalTimeZone()),
+				end: todayInternationalized(getLocalTimeZone())
+			},
+			thisWeek: {
+				start: startOfWeek(todayInternationalized(getLocalTimeZone()), locale),
+				end: endOfWeek(todayInternationalized(getLocalTimeZone()), locale)
+			},
+			thisMonth: {
+				start: startOfMonth(todayInternationalized(getLocalTimeZone())),
+				end: endOfMonth(todayInternationalized(getLocalTimeZone()))
+			},
+			last15Days: {
+				start: todayInternationalized(getLocalTimeZone()).subtract({ days: 15 }),
+				end: todayInternationalized(getLocalTimeZone())
+			},
+			last30Days: {
+				start: todayInternationalized(getLocalTimeZone()).subtract({ days: 30 }),
+				end: todayInternationalized(getLocalTimeZone())
+			}
+		}),
+		[locale]
+	);
+
+	const [dateRange, _setDateRange] = useState<RangeValue<DateValue>>(predefinedDateRanges.last30Days);
+	const [selectedDateRange, setSelectedDateRange] = useState<PredefinedDateRanges | 'custom'>('last30Days');
+
+	const setDateRange = (value: PredefinedDateRanges | RangeValue<DateValue>) => {
+		if (typeof value === 'object') _setDateRange(value);
+		else _setDateRange(predefinedDateRanges[value]);
 	};
 
-	const thisWeek = {
-		start: startOfWeek(todayInternationalized(getLocalTimeZone()), locale),
-		end: endOfWeek(todayInternationalized(getLocalTimeZone()), locale)
-	};
+	useEffect(() => {
+		const entries = Object.entries(predefinedDateRanges) as [
+			keyof typeof predefinedDateRanges,
+			RangeValue<DateValue>
+		][];
 
-	const last15Days = {
-		start: todayInternationalized(getLocalTimeZone()).subtract({ days: 15 }),
-		end: todayInternationalized(getLocalTimeZone())
-	};
+		const startFormatted = dateRange.start.toDate(getLocalTimeZone()).getDate();
+		const endFormatted = dateRange.end.toDate(getLocalTimeZone()).getDate();
 
-	const last30Days = {
-		start: todayInternationalized(getLocalTimeZone()).subtract({ days: 30 }),
-		end: todayInternationalized(getLocalTimeZone())
-	};
+		for (const [key, value] of entries) {
+			const predefinedStartFormatted = value.start.toDate(getLocalTimeZone()).getDate();
+			const predefinedEndFormatted = value.end.toDate(getLocalTimeZone()).getDate();
 
-	const [dateRange, setDateRange] = useState<RangeValue<DateValue>>(last30Days);
-	const [selectedDateRange, setSelectedDateRange] = useState<
-		'custom' | 'today' | 'thisWeek' | 'last15Days' | 'last30Days'
-	>('last30Days');
-
-	const setCustom = (customRange: RangeValue<DateValue>) => {
-		setDateRange(customRange);
-		setSelectedDateRange('custom');
-	};
-
-	const setToday = () => {
-		setDateRange(today);
-		setSelectedDateRange('today');
-	};
-
-	const setThisWeek = () => {
-		setDateRange(thisWeek);
-		setSelectedDateRange('thisWeek');
-	};
-
-	const setLast15Days = () => {
-		setDateRange(last15Days);
-		setSelectedDateRange('last15Days');
-	};
-
-	const setLast30Days = () => {
-		setDateRange(last30Days);
-		setSelectedDateRange('last30Days');
-	};
+			if (startFormatted === predefinedStartFormatted && endFormatted === predefinedEndFormatted) {
+				setSelectedDateRange(key);
+				break;
+			}
+			setSelectedDateRange('custom');
+		}
+	}, [dateRange, predefinedDateRanges]);
 
 	return {
 		dateRange,
 		selectedDateRange,
-		setCustom,
-		setToday,
-		setThisWeek,
-		setLast15Days,
-		setLast30Days
+		setDateRange
 	};
 };
