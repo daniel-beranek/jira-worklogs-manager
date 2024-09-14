@@ -13,14 +13,10 @@ export const metadata: Metadata = {
 };
 
 const AppLayout = ({
-	children,
-	req
+	children
 }: Readonly<{
 	children: ReactNode;
-	req: any;
 }>) => {
-	console.log(req);
-
 	return (
 		<html
 			lang="en"
