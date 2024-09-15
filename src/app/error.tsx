@@ -1,8 +1,7 @@
 'use client';
-import { useEffect } from 'react';
-import { Button, CardBody, Card, CardHeader } from '@nextui-org/react';
+import { Button, CardBody, Card } from '@nextui-org/react';
 
-const AppError = ({ error, reset }: Readonly<{ error: Error & { digest?: string }; reset: () => void }>) => {
+const AppError = ({ reset }: Readonly<{ error: Error & { digest?: string }; reset: () => void }>) => {
 	return (
 		<Card className="mx-auto w-fit">
 			<CardBody className="flex flex-row items-center justify-center gap-3">
