@@ -19,7 +19,14 @@ const AppLayout = ({
 	children: ReactNode;
 }>) => {
 	return (
-		<html lang="en">
+		<html
+			lang="en"
+			// Warning: Extra attributes from the server: class,style
+			//     at html
+			//     at AppLayout (Server)
+			// see providers.tsx => ThemeProvider
+			// https://github.com/pacocoursey/next-themes
+			suppressHydrationWarning>
 			<body className={inter.className}>
 				<AppProviders>
 					<Header />

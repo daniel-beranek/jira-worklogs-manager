@@ -3,17 +3,24 @@
 import { NextUIProvider } from '@nextui-org/react';
 import { type ReactNode, useEffect } from 'react';
 import { I18nProvider } from '@react-aria/i18n';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
+import { ThemeProvider } from 'next-themes';
 
 const AppProviders = ({ children }: Readonly<{ children: ReactNode }>) => {
-	const [holidayCountry, setHolidayCountry] = useLocalStorage('holidayCountry', '');
+	const [holidayCountry] = useLocalStorage('holidayCountry', '');
 	useEffect(() => {
 		document.cookie = `holidayCountry=${holidayCountry}`;
 	}, [holidayCountry]);
 
 	return (
 		<I18nProvider>
-			<NextUIProvider>{children}</NextUIProvider>
+			<NextUIProvider>
+				<ThemeProvider
+					attribute="class"
+					enableSystem>
+					{children}
+				</ThemeProvider>
+			</NextUIProvider>
 		</I18nProvider>
 	);
 };
