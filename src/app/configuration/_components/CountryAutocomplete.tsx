@@ -1,10 +1,9 @@
 'use client';
 
 import { Autocomplete, AutocompleteItem, Skeleton } from '@nextui-org/react';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { useEffect, useMemo } from 'react';
 import Holidays from 'date-holidays';
-import { toast } from 'react-hot-toast/headless';
 
 const CountryAutocomplete = () => {
 	const [selectedHolidayCountry, setSelectedHolidayCountry] = useLocalStorage<string>('holidayCountry', 'init');
