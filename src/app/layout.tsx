@@ -4,6 +4,7 @@ import './globals.css';
 import AppProviders from './providers';
 import { type ReactNode } from 'react';
 import Header from '@/app/_components/Header';
+import Toaster from '@/app/_components/Toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,7 +25,8 @@ const AppLayout = ({
 			<body className={inter.className}>
 				<AppProviders>
 					<Header />
-					<main className="container mx-auto">{children}</main>
+					<main className="container mx-auto px-2">{children}</main>
+					<Toaster />
 				</AppProviders>
 			</body>
 		</html>
