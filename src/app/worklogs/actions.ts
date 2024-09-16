@@ -1,5 +1,5 @@
 'use server';
-import { getMultipleDecryptedCookies } from '@/lib/actions/cookies';
+import { getMultipleDecryptedCookies } from '@/lib/actions';
 import { Action, JiraData } from '@/types/types';
 import Holidays, { HolidaysTypes } from 'date-holidays';
 import { cookies } from 'next/headers';

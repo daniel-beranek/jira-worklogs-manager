@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useDebounce } from '@/lib/hooks/useDebounce';
-import { getDecryptedCookie, setEncryptedCookie } from '@/lib/actions/cookies';
+import { useDebounce } from '@/lib/hooks';
+import { getDecryptedCookie, setEncryptedCookie } from '@/lib/actions';
 import { toast } from 'react-hot-toast/headless';
 
 export const useCookieInput = (name: string) => {

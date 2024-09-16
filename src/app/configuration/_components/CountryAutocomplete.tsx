@@ -1,7 +1,7 @@
 'use client';
 
 import { Autocomplete, AutocompleteItem, Skeleton } from '@nextui-org/react';
-import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
+import { useLocalStorage } from '@/lib/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import Holidays from 'date-holidays';
 
