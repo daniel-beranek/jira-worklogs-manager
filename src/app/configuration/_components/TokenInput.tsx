@@ -6,12 +6,12 @@ import { EyeFilledIcon, EyeSlashFilledIcon, InfoIcon } from '@nextui-org/shared-
 import { useState } from 'react';
 
 const TokenInput = () => {
-	const { initialLoading, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('token');
+	const { mounted, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('token');
 	const [isVisible, setIsVisible] = useState(false);
 
 	return (
 		<Skeleton
-			isLoaded={!initialLoading}
+			isLoaded={mounted}
 			className="rounded-lg">
 			<div
 				className="flex gap-2"

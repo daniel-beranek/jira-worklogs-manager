@@ -2,11 +2,17 @@
 
 import { Autocomplete, AutocompleteItem, Skeleton } from '@nextui-org/react';
 import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Holidays from 'date-holidays';
 
 const CountryAutocomplete = () => {
-	const [selectedHolidayCountry, setSelectedHolidayCountry] = useLocalStorage<string>('holidayCountry', 'init');
+	const [mounted, setMounted] = useState(false);
+	const [selectedHolidayCountry, setSelectedHolidayCountry] = useLocalStorage<string>('holidayCountry', '');
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
 	useEffect(() => {
 		document.cookie = `holidayCountry=${selectedHolidayCountry}`;
 	}, [selectedHolidayCountry]);
@@ -18,7 +24,7 @@ const CountryAutocomplete = () => {
 
 	return (
 		<Skeleton
-			isLoaded={selectedHolidayCountry !== 'init'}
+			isLoaded={mounted}
 			className="rounded-lg">
 			<Autocomplete
 				label="Country for holidays"

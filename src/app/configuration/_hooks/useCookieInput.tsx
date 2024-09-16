@@ -4,17 +4,20 @@ import { getDecryptedCookie, setEncryptedCookie } from '@/lib/actions/cookies';
 import { toast } from 'react-hot-toast/headless';
 
 export const useCookieInput = (name: string) => {
-	const [initialLoading, setInitialLoading] = useState(true);
+	const [mounted, setMounted] = useState(false);
 	const [value, setValue] = useState('');
 	const [description, setDescription] = useState('');
 	const [isProcessingValue, setIsProcessingValue] = useState(false);
 	const [debouncedValue, isDebouncingValue] = useDebounce(value);
 
 	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	useEffect(() => {
 		(async () => {
 			const cookieRes = await getDecryptedCookie({ name });
 			if (cookieRes.status === 'success') setValue(cookieRes.data);
-			setInitialLoading(false);
 		})();
 	}, [name]);
 
@@ -47,7 +50,7 @@ export const useCookieInput = (name: string) => {
 	};
 
 	return {
-		initialLoading,
+		mounted,
 		value,
 		setValue,
 		description,
