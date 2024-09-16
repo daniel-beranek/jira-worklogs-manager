@@ -9,7 +9,7 @@ const cookieSecret = process.env.COOKIE_SECRET;
 if (typeof cookieSecret === 'undefined') throw new Error('Missing COOKIE_SECRET env variable');
 const encodedSecret = new TextEncoder().encode(cookieSecret);
 
-export const setEncryptedCookie: Action<string, 'name' | 'value'> = async ({ name, value }) => {
+export const setEncryptedCookie: Action<null, 'name' | 'value'> = async ({ name, value }) => {
 	const expirationDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
 
 	const encryptedValue = await new SignJWT({ value })
@@ -25,7 +25,7 @@ export const setEncryptedCookie: Action<string, 'name' | 'value'> = async ({ nam
 		sameSite: 'strict',
 		path: '/'
 	});
-	return { data: value, status: 'success' };
+	return { data: null, status: 'success' };
 };
 
 export const getDecryptedCookie: Action<string, 'name'> = async ({ name }) => {
