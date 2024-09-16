@@ -29,7 +29,7 @@ const AppLayout = ({
 			<body className={inter.className}>
 				<AppProviders>
 					<Header />
-					<main className="container mx-auto px-2">{children}</main>
+					<main className="container mx-auto p-2">{children}</main>
 					<Toaster />
 				</AppProviders>
 			</body>
