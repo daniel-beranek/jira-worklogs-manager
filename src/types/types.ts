@@ -1,14 +1,18 @@
 import { operations } from './jira';
 
-export type JiraData<T extends keyof operations> =
+export type JiraData<
+	O extends keyof operations,
 	// @ts-expect-error
-	// TS2536: Type '200' cannot be used to index type operations[T]['responses']
-	// TS2536: Type 'content' cannot be used to index type operations[T]['responses']['200']
-	// TS2536: Type 'application/ json' cannot be used to index type operations[T]['responses']['200']['content']
-	operations[T]['responses']['200']['content']['application/json'] & {
-		errorMessages?: string[];
-		errors?: Record<string, string>;
-	};
+	// TS2344: Type number does not satisfy the constraint keyof operations[O]['responses']
+	// Type number is not assignable to type never
+	R extends keyof operations[O]['responses'] = 200
+	// @ts-expect-error
+	// TS2536: Type 'content' cannot be used to index type operations[O]['responses'][R]
+	// TS2536: Type 'application/ json' cannot be used to index type operations[O]['responses'][R]['content']
+> = operations[O]['responses'][R]['content']['application/json'] & {
+	errorMessages?: string[];
+	errors?: Record<string, string>;
+};
 
 export type StandardizedResponse<T> =
 	| { data: T; status: 'success' }
