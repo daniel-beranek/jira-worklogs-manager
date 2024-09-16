@@ -9,10 +9,10 @@ import {
 	ModalHeader,
 	TimeInput
 } from '@nextui-org/react';
-import { Worklogs } from '@/app/worklogs/actions';
+import { Worklogs } from '@/app/worklogs/_actions';
 import { useState } from 'react';
 
-const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
+export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
@@ -62,4 +62,3 @@ const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 		</>
 	);
 };
-export default LogWorkTableCell;

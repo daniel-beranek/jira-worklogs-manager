@@ -5,7 +5,7 @@ import { useLocalStorage } from '@/lib/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import Holidays from 'date-holidays';
 
-const CountryAutocomplete = () => {
+export const CountryAutocomplete = () => {
 	const [mounted, setMounted] = useState(false);
 	const [selectedHolidayCountry, setSelectedHolidayCountry] = useLocalStorage<string>('holidayCountry', '');
 
@@ -37,4 +37,3 @@ const CountryAutocomplete = () => {
 		</Skeleton>
 	);
 };
-export default CountryAutocomplete;

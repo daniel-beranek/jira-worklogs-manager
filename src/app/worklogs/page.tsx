@@ -11,12 +11,14 @@ import {
 	TableRow
 } from '@nextui-org/react';
 import { useState, useMemo } from 'react';
-import { type Worklogs } from './actions';
-import DateTableCell from '@/app/worklogs/_components/DateTableCell';
-import TimeSpentTableCell from '@/app/worklogs/_components/TimeSpentTableCell';
-import IssuesTableCell from '@/app/worklogs/_components/IssuesTableCell';
-import LogWorkTableCell from '@/app/worklogs/_components/LogWorkTableCell';
-import TableTopContent from '@/app/worklogs/_components/TableTopContent';
+import {
+	DateTableCell,
+	TimeSpentTableCell,
+	IssuesTableCell,
+	LogWorkTableCell,
+	TableTopContent
+} from '@/app/worklogs/_components';
+import { Worklogs } from '@/app/worklogs/_actions';
 
 const WorklogsPage = () => {
 	const [worklogs, setWorklogs] = useState<Worklogs>([]);

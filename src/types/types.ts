@@ -1,4 +1,4 @@
-import { operations } from './jira';
+import { operations } from '@/types/jira.d';
 
 export type JiraData<
 	O extends keyof operations,

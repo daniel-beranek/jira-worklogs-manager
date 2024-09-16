@@ -1,7 +1,7 @@
-import { Worklogs } from '@/app/worklogs/actions';
+import { Worklogs } from '@/app/worklogs/_actions';
 import { Progress } from '@nextui-org/react';
 
-const TimeSpentTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
+export const TimeSpentTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 	return (
 		<Progress
 			value={data.totalTimeSpentSeconds / 3600}
@@ -18,4 +18,3 @@ const TimeSpentTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 		/>
 	);
 };
-export default TimeSpentTableCell;

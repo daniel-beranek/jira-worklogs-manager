@@ -4,7 +4,7 @@ import { Button, Input, Skeleton, Spinner } from '@nextui-org/react';
 import { useCookieInput } from '@/app/configuration/_hooks/useCookieInput';
 import { InfoIcon } from '@nextui-org/shared-icons';
 
-const UserInput = () => {
+export const UserInput = () => {
 	const { mounted, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('user');
 
 	return (
@@ -41,5 +41,3 @@ const UserInput = () => {
 		</Skeleton>
 	);
 };
-
-export default UserInput;

@@ -5,7 +5,7 @@ import { useCookieInput } from '@/app/configuration/_hooks/useCookieInput';
 import { EyeFilledIcon, EyeSlashFilledIcon, InfoIcon } from '@nextui-org/shared-icons';
 import { useState } from 'react';
 
-const TokenInput = () => {
+export const TokenInput = () => {
 	const { mounted, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('token');
 	const [isVisible, setIsVisible] = useState(false);
 
@@ -58,5 +58,3 @@ const TokenInput = () => {
 		</Skeleton>
 	);
 };
-
-export default TokenInput;

@@ -1,9 +1,9 @@
 import { Button, Divider, Link, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
 import { remark } from 'remark';
 import html from 'remark-html';
-import { Worklogs } from '@/app/worklogs/actions';
+import { Worklogs } from '@/app/worklogs/_actions';
 
-const IssuesTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
+export const IssuesTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 	return data.issues.map((i) => (
 		<Popover key={i.key}>
 			<PopoverTrigger>
@@ -36,4 +36,3 @@ const IssuesTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 		</Popover>
 	));
 };
-export default IssuesTableCell;

@@ -1,9 +1,9 @@
-import { Worklogs } from '@/app/worklogs/actions';
+import { Worklogs } from '@/app/worklogs/_actions';
 import { getLocalTimeZone } from '@internationalized/date';
 import { useLocale } from '@react-aria/i18n';
 import { useMemo } from 'react';
 
-const DateTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
+export const DateTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 	const { locale } = useLocale();
 
 	const { day, date, holidays } = useMemo(() => {
@@ -30,5 +30,3 @@ const DateTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 		</div>
 	);
 };
-
-export default DateTableCell;

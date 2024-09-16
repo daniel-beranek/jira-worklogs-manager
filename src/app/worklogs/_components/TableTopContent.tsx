@@ -1,9 +1,9 @@
 import { Button, ButtonGroup, DateRangePicker, Skeleton } from '@nextui-org/react';
-import { getWorklogs, type Worklogs } from '@/app/worklogs/actions';
+import { getWorklogs, type Worklogs } from '@/app/worklogs/_actions';
 import { useEffect, useState } from 'react';
 import { useDateRange } from '@/app/worklogs/_hooks/useDateRange';
 
-const TableTopContent = ({
+export const TableTopContent = ({
 	onFetch
 }: Readonly<{ onFetch: (params: { data: Worklogs; isLoading: boolean }) => void }>) => {
 	const [mounted, setMounted] = useState(false);
@@ -85,5 +85,3 @@ const TableTopContent = ({
 		</Skeleton>
 	);
 };
-
-export default TableTopContent;

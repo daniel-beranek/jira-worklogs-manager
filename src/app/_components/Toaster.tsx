@@ -1,10 +1,10 @@
 'use client';
 
 import { useToaster } from 'react-hot-toast/headless';
-import Toast from '@/app/_components/Toast';
+import { Toast } from '@/app/_components/Toast';
 import { useState } from 'react';
 
-const Toaster = () => {
+export const Toaster = () => {
 	const [isPaused, setIsPaused] = useState(false);
 	const {
 		toasts,
@@ -34,4 +34,3 @@ const Toaster = () => {
 		</div>
 	);
 };
-export default Toaster;

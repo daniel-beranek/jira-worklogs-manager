@@ -2,7 +2,7 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link } from '@nextui-org/react';
 import { usePathname } from 'next/navigation';
 
-const Header = () => {
+export const Header = () => {
 	const pathName = usePathname();
 	return (
 		<Navbar position="static">
@@ -30,4 +30,3 @@ const Header = () => {
 		</Navbar>
 	);
 };
-export default Header;

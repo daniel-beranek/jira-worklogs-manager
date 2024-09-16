@@ -2,10 +2,10 @@
 
 import { Card, CardBody, Progress } from '@nextui-org/react';
 import { CheckIcon, CloseFilledIcon } from '@nextui-org/shared-icons';
-import { type Toast } from 'react-hot-toast/headless';
+import { type Toast as ToastType } from 'react-hot-toast/headless';
 import { useEffect, useState } from 'react';
 
-const Toast = ({ toast, isPaused }: Readonly<{ toast: Toast; isPaused: boolean }>) => {
+export const Toast = ({ toast, isPaused }: Readonly<{ toast: ToastType; isPaused: boolean }>) => {
 	const [intervalTick, setIntervalTick] = useState(0);
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -59,4 +59,3 @@ const Toast = ({ toast, isPaused }: Readonly<{ toast: Toast; isPaused: boolean }
 		</Card>
 	);
 };
-export default Toast;
