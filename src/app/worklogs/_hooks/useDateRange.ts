@@ -40,8 +40,12 @@ export const useDateRange = () => {
 		[locale]
 	);
 
-	const [dateRange, _setDateRange] = useState<RangeValue<DateValue>>(predefinedDateRanges.last30Days);
-	const [selectedDateRange, setSelectedDateRange] = useState<PredefinedDateRanges | 'custom'>('last30Days');
+	const [dateRange, _setDateRange] = useState<RangeValue<DateValue>>(predefinedDateRanges.thisWeek);
+	const [selectedDateRange, setSelectedDateRange] = useState<PredefinedDateRanges | 'custom'>('thisWeek');
+
+	useEffect(() => {
+		_setDateRange(predefinedDateRanges.thisWeek);
+	}, [predefinedDateRanges]);
 
 	const setDateRange = (value: PredefinedDateRanges | RangeValue<DateValue>) => {
 		if (typeof value === 'object') _setDateRange(value);
