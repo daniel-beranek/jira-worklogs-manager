@@ -7,13 +7,34 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	TimeInput
+	TimeInput,
+	DateInput
 } from '@nextui-org/react';
-import { Worklogs } from '@/app/worklogs/_actions';
+import { logWork, Worklogs } from '@/app/worklogs/_actions';
 import { useState } from 'react';
+import { parseDate, CalendarDate, Time } from '@internationalized/date';
+import { toast } from 'react-hot-toast/headless';
 
 export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [timeValue, setTimeValue] = useState(new Time(0, 1));
+
+	const worklogKey = 'PCFA-150';
+	const worklogDate = data.date;
+	const worklogTime = timeValue.hour * 3600 + timeValue.minute * 60 + timeValue.second;
+
+	const handleSubmit = async () => {
+		const res = await logWork({
+			issueKeyOrId: worklogKey,
+			date: worklogDate,
+			timeSpentSeconds: worklogTime.toString()
+		});
+		if (res.status === 'success') {
+			setIsOpen(false);
+			toast.success('Worklog created');
+		}
+		if (res.status === 'error') res.errors.forEach((error) => toast.error(error));
+	};
 
 	return (
 		<>
@@ -35,7 +56,20 @@ export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>)
 						<>
 							<ModalHeader>Log work</ModalHeader>
 							<ModalBody>
-								<TimeInput label="Event Time" />
+								{worklogKey}
+								<DateInput
+									label={'Worklog date'}
+									labelPlacement="outside"
+									isReadOnly
+									isDisabled
+									defaultValue={parseDate(worklogDate.slice(0, 10))}
+								/>
+								<TimeInput
+									label="Time spent"
+									labelPlacement="outside"
+									value={timeValue}
+									onChange={setTimeValue}
+								/>
 								<Checkbox
 									classNames={{
 										label: 'text-small'
@@ -52,8 +86,8 @@ export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>)
 								</Button>
 								<Button
 									color="primary"
-									onPress={onClose}>
-									Sign in
+									onPress={handleSubmit}>
+									Submit
 								</Button>
 							</ModalFooter>
 						</>

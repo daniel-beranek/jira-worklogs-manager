@@ -2,6 +2,7 @@ import { Button, ButtonGroup, DateRangePicker, Skeleton } from '@nextui-org/reac
 import { getWorklogs, type Worklogs } from '@/app/worklogs/_actions';
 import { useEffect, useState } from 'react';
 import { useDateRange } from '@/app/worklogs/_hooks/useDateRange';
+import { toast } from 'react-hot-toast/headless';
 
 export const TableTopContent = ({
 	onFetch
@@ -74,6 +75,10 @@ export const TableTopContent = ({
 
 						if (worklogsRes.status === 'success') {
 							setData(worklogsRes.data);
+						}
+
+						if (worklogsRes.status === 'error') {
+							worklogsRes.errors.forEach((error) => toast.error(error));
 						}
 
 						setIsLoading(false);

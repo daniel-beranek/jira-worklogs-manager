@@ -3,6 +3,7 @@ import { getMultipleDecryptedCookies } from '@/lib/actions';
 import { Action, JiraData } from '@/types/types';
 import Holidays, { HolidaysTypes } from 'date-holidays';
 import { cookies } from 'next/headers';
+import { ReactNode } from 'react';
 
 export type Worklogs = {
 	date: string;
@@ -15,14 +16,9 @@ export type Worklogs = {
 		description: unknown;
 	}[];
 }[];
-// TODO: replace with one action fetching all the data
-// set this based on table row data, then return the new data, then convert them to html on client page, then remove functions above
-// next refactor config page cuz of new return types and useAction hooks instead of useState
+
 export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ dateStart, dateEnd }) => {
 	try {
-		// TODO: return errors if length
-		const errors: string[] = [];
-
 		const cookieRes = await getMultipleDecryptedCookies('url', 'user', 'token');
 		if (cookieRes.status !== 'success') return cookieRes;
 		const { url, user, token } = cookieRes.data;
@@ -37,10 +33,8 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 				}
 			);
 			const issuesJson: JiraData<'searchForIssuesUsingJql'> = await issuesRes.json();
-			if (!issuesRes.ok) {
-				errors.push(...(issuesJson.errorMessages ?? []));
-				break;
-			}
+			if (!issuesRes.ok) return { status: 'error', errors: issuesJson.errorMessages ?? ['Something went wrong'] };
+
 			const issues = issuesJson.issues ?? [];
 			issuesBuffer.push(...issues);
 
@@ -48,9 +42,10 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 			if (startAt >= (issuesJson.total ?? 0)) break;
 		}
 
+		const worklogsBufferErrors: ReactNode[] = [];
 		const worklogsBuffer = await Promise.all(
 			issuesBuffer.map(async (issue) => {
-				if (errors.length) return;
+				if (worklogsBufferErrors.length) return;
 
 				// this call should accept query params to filter the results by date and pagination
 				// (https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-get)
@@ -59,15 +54,16 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 					headers: { Authorization: `Bearer ${token}` }
 				});
 				const worklogsJson: JiraData<'getIssueWorklog'> = await worklogsRes.json();
-				if (!worklogsRes.ok) errors.push(...(worklogsJson.errorMessages ?? []));
+				if (!worklogsRes.ok) worklogsBufferErrors.push(...(worklogsJson.errorMessages ?? []));
 				if ((worklogsJson.maxResults ?? 0) < (worklogsJson.total ?? 0))
-					errors.push(
+					worklogsBufferErrors.push(
 						`Issue ${issue.key} has more than ${worklogsJson.maxResults} worklogs. Some data will be missing.`
 					);
 
 				return worklogsJson.worklogs;
 			})
 		);
+		if (worklogsBufferErrors.length) return { status: 'error', errors: worklogsBufferErrors };
 
 		const worklogsBufferFilteredByAuthorAndDates = worklogsBuffer.flat().filter((w) => {
 			if (!w?.author || !w.started) return false;
@@ -77,16 +73,13 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 			return true;
 		});
 
-		console.log(worklogsBuffer);
-
-		//TODO: set type
 		const finalWorklogs: Worklogs = [];
 		const firstDate = new Date(dateStart);
 		const lastDate = new Date(dateEnd);
 		const holidays = new Holidays(cookies().get('holidayCountry')?.value ?? '');
 		let currentDate = firstDate;
 		if (firstDate > lastDate) {
-			errors.push('Start date cannot be after end date.');
+			return { status: 'error', errors: ['Start date cannot be after end date.'] };
 		} else {
 			while (currentDate <= lastDate) {
 				const currentDateWorklogs = worklogsBufferFilteredByAuthorAndDates.filter((w) => {
@@ -125,7 +118,7 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 		console.error(e);
 		return {
 			status: 'error',
-			errors: ['Unexpected error occurred while getting worklogs']
+			errors: ['Something went wrong']
 		};
 	}
 };

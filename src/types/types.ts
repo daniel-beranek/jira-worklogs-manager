@@ -1,4 +1,5 @@
 import { operations } from '@/types/jira.d';
+import { ReactNode } from 'react';
 
 export type JiraData<
 	O extends keyof operations,
@@ -11,12 +12,12 @@ export type JiraData<
 	// TS2536: Type 'application/ json' cannot be used to index type operations[O]['responses'][R]['content']
 > = operations[O]['responses'][R]['content']['application/json'] & {
 	errorMessages?: string[];
-	errors?: Record<string, string>;
+	errors?: Record<string, unknown>;
 };
 
 export type StandardizedResponse<T> =
 	| { data: T; status: 'success' }
-	| { errors: string[]; status: 'error' }
+	| { errors: ReactNode[]; status: 'error' }
 	| { status: 'idle' };
 
 export type Action<T, P extends string | number | symbol = string> = (

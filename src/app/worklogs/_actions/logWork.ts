@@ -11,8 +11,11 @@ export const logWork: Action<'success', 'issueKeyOrId' | 'date' | 'timeSpentSeco
 	if (cookieRes.status !== 'success') return cookieRes;
 	const { url, token } = cookieRes.data;
 
-	const address = `https://${url}/rest/api/2/issue/${issueKeyOrId}/worklog`;
-	const config = {
+	const isoString = new Date(date).toISOString();
+	const dateString = isoString.slice(0, 10);
+	const jiraStarted = `${dateString}T12:00:00.000+0200`;
+
+	const res = await fetch(`https://${url}/rest/api/2/issue/${issueKeyOrId}/worklog`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${token}`,
@@ -20,14 +23,11 @@ export const logWork: Action<'success', 'issueKeyOrId' | 'date' | 'timeSpentSeco
 		},
 		body: JSON.stringify({
 			timeSpentSeconds,
-			started: new Date(date).toISOString().replace('Z', '-0500')
+			started: jiraStarted
 		})
-	};
-
-	const res = await fetch(address, config);
-	const json: JiraData<'addWorklog'> = await res.json();
-	console.log(json);
-
-	if (!res.ok) return { status: 'error', errors: json.errorMessages ?? [] };
+	});
+	const json: JiraData<'addWorklog', 201> = await res.json();
+	if (!res.ok) return { status: 'error', errors: json.errorMessages ?? ['Something went wrong'] };
+	console.log('started:', json.started, 'created:', json.created);
 	return { status: 'success', data: 'success' };
 };

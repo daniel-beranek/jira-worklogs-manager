@@ -14,7 +14,10 @@ export const getDecryptedCookie: Action<string, 'name'> = async ({ name }) => {
 	if (typeof encryptedCookie === 'undefined') {
 		return {
 			errors: [
-				`Could not get value of '${name}'. Please make sure you have it set in your configuration tab, have cookies allowed in your browser and try again.`
+				<p key={name}>
+					Could not get value of <strong>{name}</strong>. Please make sure you have it set in your
+					<strong> configuration</strong> tab, have cookies allowed in your browser and try again.
+				</p>
 			],
 			status: 'error'
 		};

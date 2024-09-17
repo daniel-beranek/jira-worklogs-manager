@@ -3,27 +3,36 @@
 import 'server-only';
 import { StandardizedResponse } from '@/types/types';
 import { getDecryptedCookie } from '@/lib/actions/getDecryptedCookie';
+import { ReactNode } from 'react';
 
 export const getMultipleDecryptedCookies = async <T extends string>(
 	...names: T[]
 ): Promise<StandardizedResponse<Record<T, string>>> => {
-	const errors: string[] = [];
+	const errors: ReactNode[] = [];
 	const isValidReturnType = (obj: Record<string, unknown>): obj is Record<T, string> => {
 		let isValid: boolean = true;
-		names.forEach((name, i) => {
+
+		names.forEach((name) => {
 			if (typeof obj[name] !== 'string' || !obj[name].length) {
 				errors.push(
-					`Could not get value of '${name}'. Please make sure you have it set in your configuration tab, have cookies allowed in your browser and try again.`
-				);
-				isValid = false;
-			}
-			if (i === 0 && Object.keys(obj).length !== names.length) {
-				errors.push(
-					'Could not get all data. Please make sure you have cookies allowed in your browser and try again.'
+					<p key={name}>
+						Could not get value of <strong>{name}</strong>. Please make sure you have it set in your
+						<strong> configuration</strong> tab, have cookies allowed in your browser and try again.
+					</p>
 				);
 				isValid = false;
 			}
 		});
+
+		if (Object.keys(obj).length !== names.length) {
+			errors.push(
+				<p key={'invalidLengthError'}>
+					Could not get all data. Please make sure you have cookies allowed in your browser and try again.
+				</p>
+			);
+			isValid = false;
+		}
+
 		return isValid;
 	};
 
