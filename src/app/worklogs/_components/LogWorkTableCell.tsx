@@ -10,12 +10,15 @@ import {
 	TimeInput,
 	DateInput
 } from '@nextui-org/react';
-import { logWork, Worklogs } from '@/app/worklogs/_actions';
+import { LoggedWork, logWork, Worklogs } from '@/app/worklogs/_actions';
 import { useState } from 'react';
-import { parseDate, CalendarDate, Time } from '@internationalized/date';
+import { parseDate, Time } from '@internationalized/date';
 import { toast } from 'react-hot-toast/headless';
 
-export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
+export const LogWorkTableCell = ({
+	data,
+	onFetchSuccess
+}: Readonly<{ data: Worklogs[number]; onFetchSuccess: (data: LoggedWork) => void }>) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [timeValue, setTimeValue] = useState(new Time(0, 1));
 
@@ -23,13 +26,14 @@ export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>)
 	const worklogDate = data.date;
 	const worklogTime = timeValue.hour * 3600 + timeValue.minute * 60 + timeValue.second;
 
-	const handleSubmit = async () => {
+	const handleLogWork = async () => {
 		const res = await logWork({
 			issueKeyOrId: worklogKey,
 			date: worklogDate,
 			timeSpentSeconds: worklogTime.toString()
 		});
 		if (res.status === 'success') {
+			onFetchSuccess(res.data);
 			setIsOpen(false);
 			toast.success('Worklog created');
 		}
@@ -86,7 +90,7 @@ export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>)
 								</Button>
 								<Button
 									color="primary"
-									onPress={handleSubmit}>
+									onPress={handleLogWork}>
 									Submit
 								</Button>
 							</ModalFooter>

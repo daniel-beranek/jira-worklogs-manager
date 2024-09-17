@@ -21,6 +21,17 @@ export const TableTopContent = ({
 		onFetch({ data, isLoading });
 	}, [data, isLoading, onFetch]);
 
+	const handleWorklogsFetch = async () => {
+		setIsLoading(true);
+		const res = await getWorklogs({
+			dateStart: dateRange.start.toString(),
+			dateEnd: dateRange.end.toString()
+		});
+		if (res.status === 'success') setData(res.data);
+		if (res.status === 'error') res.errors.forEach((error) => toast.error(error));
+		setIsLoading(false);
+	};
+
 	return (
 		<Skeleton
 			isLoaded={mounted}
@@ -65,24 +76,7 @@ export const TableTopContent = ({
 					</Button>
 				</ButtonGroup>
 				<Button
-					onClick={async () => {
-						setIsLoading(true);
-
-						const worklogsRes = await getWorklogs({
-							dateStart: dateRange.start.toString(),
-							dateEnd: dateRange.end.toString()
-						});
-
-						if (worklogsRes.status === 'success') {
-							setData(worklogsRes.data);
-						}
-
-						if (worklogsRes.status === 'error') {
-							worklogsRes.errors.forEach((error) => toast.error(error));
-						}
-
-						setIsLoading(false);
-					}}
+					onClick={handleWorklogsFetch}
 					color="primary">
 					Load worklogs
 				</Button>
