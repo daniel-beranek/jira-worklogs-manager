@@ -3,12 +3,10 @@
 import 'server-only';
 import { StandardizedResponse } from '@/types/types';
 import { getDecryptedCookie } from '@/lib/actions/getDecryptedCookie';
-import { ReactNode } from 'react';
-
 export const getMultipleDecryptedCookies = async <T extends string>(
 	...names: T[]
 ): Promise<StandardizedResponse<Record<T, string>>> => {
-	const errors: ReactNode[] = [];
+	const errors: (string | JSX.Element)[] = [];
 	const isValidReturnType = (obj: Record<string, unknown>): obj is Record<T, string> => {
 		let isValid: boolean = true;
 
