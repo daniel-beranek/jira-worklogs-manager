@@ -1,5 +1,4 @@
 import { operations } from '@/types/jira.d';
-import { ReactNode } from 'react';
 
 export type JiraData<
 	O extends keyof operations,
@@ -17,7 +16,7 @@ export type JiraData<
 
 export type StandardizedResponse<T> =
 	| { data: T; status: 'success' }
-	| { errors: ReactNode[]; status: 'error' }
+	| { errors: (string | JSX.Element)[]; status: 'error' }
 	| { status: 'idle' };
 
 export type Action<T, P extends string | number | symbol = string> = (

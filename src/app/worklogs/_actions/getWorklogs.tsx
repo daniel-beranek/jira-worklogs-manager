@@ -3,7 +3,6 @@ import { getMultipleDecryptedCookies } from '@/lib/actions';
 import { Action, JiraData } from '@/types/types';
 import Holidays, { HolidaysTypes } from 'date-holidays';
 import { cookies } from 'next/headers';
-import { ReactNode } from 'react';
 
 export type Worklogs = {
 	date: string;
@@ -42,7 +41,7 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 			if (startAt >= (issuesJson.total ?? 0)) break;
 		}
 
-		const worklogsBufferErrors: ReactNode[] = [];
+		const worklogsBufferErrors: (string | JSX.Element)[] = [];
 		const worklogsBuffer = await Promise.all(
 			issuesBuffer.map(async (issue) => {
 				if (worklogsBufferErrors.length) return;
@@ -57,7 +56,10 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 				if (!worklogsRes.ok) worklogsBufferErrors.push(...(worklogsJson.errorMessages ?? []));
 				if ((worklogsJson.maxResults ?? 0) < (worklogsJson.total ?? 0))
 					worklogsBufferErrors.push(
-						`Issue ${issue.key} has more than ${worklogsJson.maxResults} worklogs. Some data will be missing.`
+						<p>
+							Issue <strong>{issue.key}</strong> has more than <strong>{worklogsJson.maxResults}</strong>{' '}
+							worklogs. Some data will be missing.
+						</p>
 					);
 
 				return worklogsJson.worklogs;
