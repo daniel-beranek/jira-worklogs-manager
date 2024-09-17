@@ -2,13 +2,13 @@
 
 import {
 	getKeyValue,
-	Spinner,
 	Table,
 	TableBody,
 	TableCell,
 	TableColumn,
 	TableHeader,
-	TableRow
+	TableRow,
+	Skeleton
 } from '@nextui-org/react';
 import { useState, useMemo } from 'react';
 import {
@@ -61,7 +61,6 @@ const WorklogsPage = () => {
 				{(column) => (
 					<TableColumn
 						align={column.key === 'date' ? 'start' : 'center'}
-						// minWidth={0}
 						width={
 							column.key === 'date'
 								? '300'
@@ -73,7 +72,6 @@ const WorklogsPage = () => {
 											? '100'
 											: undefined
 						}
-						// maxWidth={1000}
 						key={column.key}>
 						{column.label}
 					</TableColumn>
@@ -82,8 +80,8 @@ const WorklogsPage = () => {
 			<TableBody
 				items={rows}
 				isLoading={isLoading}
-				loadingContent={<Spinner />}
-				emptyContent="Click 'Fetch' to get worklogs">
+				loadingContent={<Skeleton className="h-full w-full" />}
+				emptyContent="Click 'Load worklogs'">
 				{(item) => (
 					<TableRow key={item.key}>
 						{(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
