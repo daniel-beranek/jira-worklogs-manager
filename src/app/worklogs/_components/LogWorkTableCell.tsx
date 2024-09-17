@@ -20,6 +20,7 @@ export const LogWorkTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>)
 			<Button
 				isIconOnly
 				size="sm"
+				variant="flat"
 				onClick={() => {
 					setIsOpen(true);
 				}}>

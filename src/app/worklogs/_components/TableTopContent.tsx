@@ -24,7 +24,7 @@ export const TableTopContent = ({
 		<Skeleton
 			isLoaded={mounted}
 			className="rounded-lg">
-			<div className="flex items-end justify-between gap-2">
+			<div className="flex flex-wrap items-end justify-between gap-2">
 				<DateRangePicker
 					fullWidth={undefined}
 					variant={undefined}

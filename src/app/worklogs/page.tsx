@@ -31,19 +31,24 @@ const WorklogsPage = () => {
 		{ key: 'logWork', label: 'LOG WORK' }
 	];
 
-	const rows = useMemo(() => {
-		return worklogs.map((w) => ({
-			key: w.date,
-			date: <DateTableCell data={w} />,
-			timeSpent: <TimeSpentTableCell data={w} />,
-			issues: <IssuesTableCell data={w} />,
-			logWork: <LogWorkTableCell data={w} />
-		}));
-	}, [worklogs]);
+	const rows = useMemo(
+		() =>
+			worklogs.map((w) => ({
+				key: w.date,
+				date: <DateTableCell data={w} />,
+				timeSpent: <TimeSpentTableCell data={w} />,
+				issues: <IssuesTableCell data={w} />,
+				logWork: <LogWorkTableCell data={w} />
+			})),
+		[worklogs]
+	);
 
 	return (
 		<Table
+			shadow="md"
+			isHeaderSticky
 			aria-label="Worklog table"
+			className="max-h-[calc(100dvh-5rem)]"
 			topContent={
 				<TableTopContent
 					onFetch={({ data, isLoading }) => {
@@ -55,8 +60,20 @@ const WorklogsPage = () => {
 			<TableHeader columns={columns}>
 				{(column) => (
 					<TableColumn
-						//align="center"
-						//allowsSorting={column.key === 'date'}
+						align={column.key === 'date' ? 'start' : 'center'}
+						// minWidth={0}
+						width={
+							column.key === 'date'
+								? '300'
+								: column.key === 'timeSpent'
+									? '400'
+									: column.key === 'issues'
+										? '500'
+										: column.key === 'logWork'
+											? '100'
+											: undefined
+						}
+						// maxWidth={1000}
 						key={column.key}>
 						{column.label}
 					</TableColumn>
