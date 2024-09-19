@@ -26,13 +26,11 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 		const { url, user, token } = cookieRes.data;
 
 		let startAt = 0;
-		const issuesBuffer: Required<JiraData<'searchForIssuesUsingJql'>['issues']> = [];
+		const issuesBuffer: NonNullable<JiraData<'searchForIssuesUsingJql'>['issues']> = [];
 		while (true) {
 			const issuesRes = await fetch(
 				`https://${url}/rest/api/${API_VERSION}/search?jql=worklogAuthor = "${user}" AND worklogDate >= ${dateStart} AND worklogDate <= ${dateEnd}&startAt=${startAt}`,
-				{
-					headers: { Authorization: `Bearer ${token}` }
-				}
+				{ headers: { Authorization: `Bearer ${token}` } }
 			);
 			const issuesJson: JiraData<'searchForIssuesUsingJql'> = await issuesRes.json();
 			if (!issuesRes.ok) return { status: 'error', errors: issuesJson.errorMessages ?? ['Something went wrong'] };
