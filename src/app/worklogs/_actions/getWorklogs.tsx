@@ -16,6 +16,9 @@ export type Worklogs = {
 	}[];
 }[];
 
+const API_VERSION = process.env.API_VERSION;
+if (typeof API_VERSION === 'undefined') throw new Error('Missing API_VERSION env variable');
+
 export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ dateStart, dateEnd }) => {
 	try {
 		const cookieRes = await getMultipleDecryptedCookies('url', 'user', 'token');
@@ -26,7 +29,7 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 		const issuesBuffer: Required<JiraData<'searchForIssuesUsingJql'>['issues']> = [];
 		while (true) {
 			const issuesRes = await fetch(
-				`https://${url}/rest/api/2/search?jql=worklogAuthor = "${user}" AND worklogDate >= ${dateStart} AND worklogDate <= ${dateEnd}&startAt=${startAt}`,
+				`https://${url}/rest/api/${API_VERSION}/search?jql=worklogAuthor = "${user}" AND worklogDate >= ${dateStart} AND worklogDate <= ${dateEnd}&startAt=${startAt}`,
 				{
 					headers: { Authorization: `Bearer ${token}` }
 				}
@@ -49,7 +52,7 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 				// this call should accept query params to filter the results by date and pagination
 				// (https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-get)
 				// however it does not seem to work
-				const worklogsRes = await fetch(`https://${url}/rest/api/2/issue/${issue.key}/worklog`, {
+				const worklogsRes = await fetch(`https://${url}/rest/api/${API_VERSION}/issue/${issue.key}/worklog`, {
 					headers: { Authorization: `Bearer ${token}` }
 				});
 				const worklogsJson: JiraData<'getIssueWorklog'> = await worklogsRes.json();

@@ -5,9 +5,9 @@ import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 import { Action } from '@/types/types';
 
-const cookieSecret = process.env.COOKIE_SECRET;
-if (typeof cookieSecret === 'undefined') throw new Error('Missing COOKIE_SECRET env variable');
-const encodedSecret = new TextEncoder().encode(cookieSecret);
+const COOKIE_SECRET = process.env.COOKIE_SECRET;
+if (typeof COOKIE_SECRET === 'undefined') throw new Error('Missing COOKIE_SECRET env variable');
+const encodedSecret = new TextEncoder().encode(COOKIE_SECRET);
 
 export const getDecryptedCookie: Action<string, 'name'> = async ({ name }) => {
 	const encryptedCookie = cookies().get(name)?.value;

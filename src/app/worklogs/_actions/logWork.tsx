@@ -7,6 +7,9 @@ export type LoggedWork = {
 	timeSpentSeconds: number;
 };
 
+const API_VERSION = process.env.API_VERSION;
+if (typeof API_VERSION === 'undefined') throw new Error('Missing API_VERSION env variable');
+
 export const logWork: Action<LoggedWork, 'issueKeyOrId' | 'date' | 'timeSpentSeconds'> = async ({
 	issueKeyOrId,
 	date,
@@ -21,7 +24,7 @@ export const logWork: Action<LoggedWork, 'issueKeyOrId' | 'date' | 'timeSpentSec
 		const dateString = isoString.slice(0, 10);
 		const jiraStarted = `${dateString}T12:00:00.000+0200`;
 
-		const res = await fetch(`https://${url}/rest/api/2/issue/${issueKeyOrId}/worklog`, {
+		const res = await fetch(`https://${url}/rest/api/${API_VERSION}/issue/${issueKeyOrId}/worklog`, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${token}`,
