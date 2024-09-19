@@ -38,9 +38,6 @@ export const TableTopContent = ({
 			className="rounded-lg">
 			<div className="flex flex-wrap items-end justify-between gap-2">
 				<DateRangePicker
-					fullWidth={undefined}
-					variant={undefined}
-					radius={undefined}
 					aria-label="Date range"
 					className="max-w-xs"
 					visibleMonths={2}
@@ -75,6 +72,7 @@ export const TableTopContent = ({
 						Last 30 days
 					</Button>
 				</ButtonGroup>
+
 				<Button
 					onClick={handleWorklogsFetch}
 					color="primary">

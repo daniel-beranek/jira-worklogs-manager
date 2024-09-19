@@ -2,8 +2,11 @@ import { Button, Divider, Link, Popover, PopoverContent, PopoverTrigger, ScrollS
 import { remark } from 'remark';
 import html from 'remark-html';
 import { Worklogs } from '@/app/worklogs/_actions';
+import classNames from 'classnames';
 
-export const IssuesTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) => {
+export const IssuesTableCell = ({ data, isWeekend }: Readonly<{ data: Worklogs[number]; isWeekend: boolean }>) => {
+	const buttonClassnames = classNames('shrink-0', { 'opacity-disabled data-[hover=true]:opacity-45': isWeekend });
+
 	return (
 		<ScrollShadow
 			className="ml-4 flex w-[33dvw] max-w-[500px] grow-0 flex-nowrap items-center gap-2"
@@ -14,7 +17,7 @@ export const IssuesTableCell = ({ data }: Readonly<{ data: Worklogs[number] }>) 
 				<Popover key={i.key}>
 					<PopoverTrigger>
 						<Button
-							className="shrink-0"
+							className={buttonClassnames}
 							variant="flat"
 							size="sm">
 							{i.key}

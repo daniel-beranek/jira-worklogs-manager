@@ -19,17 +19,13 @@ import {
 	TableTopContent
 } from '@/app/worklogs/_components';
 import { LoggedWork, Worklogs } from '@/app/worklogs/_actions';
+import { isWeekend as getIsWeekend, CalendarDate } from '@internationalized/date';
+import { useLocale } from '@react-aria/i18n';
 
 const WorklogsPage = () => {
 	const [worklogs, setWorklogs] = useState<Worklogs>([]);
 	const [isLoading, setIsLoading] = useState(false);
-
-	const columns = [
-		{ key: 'date', label: 'DATE' },
-		{ key: 'timeSpent', label: 'TIME SPENT' },
-		{ key: 'issues', label: 'ISSUES' },
-		{ key: 'logWork', label: 'LOG WORK' }
-	];
+	const { locale } = useLocale();
 
 	const handleLoggedWorkSuccess = useCallback<(data: LoggedWork) => void>(
 		(data) =>
@@ -55,27 +51,57 @@ const WorklogsPage = () => {
 		[]
 	);
 
+	const disabledRows = useMemo(
+		() =>
+			worklogs.reduce<string[]>((acc, w) => {
+				const dateInstance = new Date(w.date);
+				const year = dateInstance.getFullYear();
+				const month = dateInstance.getMonth() + 1;
+				const day = dateInstance.getDate();
+				const isWeekend = getIsWeekend(new CalendarDate(year, month, day), locale);
+
+				if (isWeekend) return [...acc, w.date];
+				if (w.isHoliday) return [...acc, w.date];
+				return acc;
+			}, []),
+		[worklogs, locale]
+	);
+
+	const columns = [
+		{ key: 'date', label: 'DATE' },
+		{ key: 'timeSpent', label: 'TIME SPENT' },
+		{ key: 'issues', label: 'ISSUES' },
+		{ key: 'logWork', label: 'LOG WORK' }
+	];
+
 	const rows = useMemo(
 		() =>
 			worklogs.map((w) => ({
 				key: w.date,
 				date: <DateTableCell data={w} />,
 				timeSpent: <TimeSpentTableCell data={w} />,
-				issues: <IssuesTableCell data={w} />,
+				issues: (
+					<IssuesTableCell
+						data={w}
+						isWeekend={disabledRows.includes(w.date)}
+					/>
+				),
 				logWork: (
 					<LogWorkTableCell
 						data={w}
 						onFetchSuccess={handleLoggedWorkSuccess}
+						isWeekend={disabledRows.includes(w.date)}
 					/>
 				)
 			})),
-		[worklogs, handleLoggedWorkSuccess]
+		[worklogs, handleLoggedWorkSuccess, disabledRows]
 	);
 
 	return (
 		<Table
 			shadow="md"
 			isHeaderSticky
+			disabledKeys={disabledRows}
 			aria-label="Worklog table"
 			className="max-h-[calc(100dvh-5rem)]"
 			topContent={<TableTopContent onFetch={handleWorklogsFetch} />}>
