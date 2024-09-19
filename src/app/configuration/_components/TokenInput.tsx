@@ -33,7 +33,13 @@ export const TokenInput = () => {
 					}
 					endContent={
 						<div className="flex items-center gap-2">
-							{isProcessingValue && <Spinner color="default" />}
+							{isProcessingValue && (
+								<Spinner
+									color="current"
+									className="opacity-75"
+									size="sm"
+								/>
+							)}
 							<button
 								className="focus:outline-none"
 								type="button"

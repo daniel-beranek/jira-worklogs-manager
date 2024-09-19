@@ -29,7 +29,15 @@ export const UserInput = () => {
 							</span>
 						)
 					}
-					endContent={isProcessingValue && <Spinner color="default" />}
+					endContent={
+						isProcessingValue && (
+							<Spinner
+								color="current"
+								className="opacity-75"
+								size="sm"
+							/>
+						)
+					}
 				/>
 				<Button
 					onClick={() => handleSubmit(value)}
