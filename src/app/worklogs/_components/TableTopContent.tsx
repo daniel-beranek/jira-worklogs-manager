@@ -32,6 +32,7 @@ export const TableTopContent = ({
 		setIsLoading(false);
 	};
 
+	// noinspection RequiredAttributes - DateRangePicker seems to have wrongly typed required attributes
 	return (
 		<Skeleton
 			isLoaded={mounted}
