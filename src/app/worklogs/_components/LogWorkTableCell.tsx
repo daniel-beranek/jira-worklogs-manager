@@ -24,7 +24,7 @@ export const LogWorkTableCell = ({
 }: Readonly<{ data: Worklogs[number]; onFetchSuccess: (data: LoggedWork) => void; isWeekend: boolean }>) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [issueKey, setIssueKey] = useState<string | null>(null);
-	const [timeValue, setTimeValue] = useState(new Time(0, 1));
+	const [timeValue, setTimeValue] = useState(new Time(0, 0));
 
 	const handleLogWork = async () => {
 		if (!issueKey) return toast.error('No issue selected');
