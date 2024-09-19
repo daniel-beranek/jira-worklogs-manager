@@ -58,12 +58,12 @@ export const useDateRange = () => {
 			RangeValue<DateValue>
 		][];
 
-		const startFormatted = dateRange.start.toDate(getLocalTimeZone()).getDate();
-		const endFormatted = dateRange.end.toDate(getLocalTimeZone()).getDate();
+		const startFormatted = dateRange.start.toDate(getLocalTimeZone()).toDateString();
+		const endFormatted = dateRange.end.toDate(getLocalTimeZone()).toDateString();
 
 		for (const [key, value] of entries) {
-			const predefinedStartFormatted = value.start.toDate(getLocalTimeZone()).getDate();
-			const predefinedEndFormatted = value.end.toDate(getLocalTimeZone()).getDate();
+			const predefinedStartFormatted = value.start.toDate(getLocalTimeZone()).toDateString();
+			const predefinedEndFormatted = value.end.toDate(getLocalTimeZone()).toDateString();
 
 			if (startFormatted === predefinedStartFormatted && endFormatted === predefinedEndFormatted) {
 				setSelectedDateRange(key);
