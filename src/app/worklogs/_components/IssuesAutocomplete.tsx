@@ -12,9 +12,8 @@ export const IssuesAutocomplete = ({ onSelectionChange }: Readonly<{ onSelection
 
 	useEffect(() => {
 		if (isDebouncingValue) setIsLoading(true);
-		else if (debouncedValue)
+		else if (debouncedValue !== null)
 			(async () => {
-				console.log('fetching');
 				const res = await searchIssues({ query: debouncedValue });
 				if (res.status === 'success') setIssuePickerSections(res.data);
 				if (res.status === 'error') res.errors.map((error) => toast.error(error));
