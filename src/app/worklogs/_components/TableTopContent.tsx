@@ -37,16 +37,18 @@ export const TableTopContent = ({
 		<Skeleton
 			isLoaded={mounted}
 			className="rounded-lg">
-			<div className="flex flex-wrap items-end justify-between gap-2">
+			<div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end md:justify-between">
 				<DateRangePicker
 					aria-label="Date range"
-					className="max-w-xs"
+					className="md:max-w-xs"
 					visibleMonths={2}
 					value={dateRange}
 					onChange={setDateRange}
 				/>
 
-				<ButtonGroup variant="flat">
+				<ButtonGroup
+					className="hidden sm:block"
+					variant="flat">
 					<Button
 						color={selectedDateRange === 'today' ? 'primary' : 'default'}
 						onClick={() => setDateRange('today')}>
@@ -75,6 +77,7 @@ export const TableTopContent = ({
 				</ButtonGroup>
 
 				<Button
+					className="mr-auto sm:ml-auto sm:mr-0"
 					onClick={handleWorklogsFetch}
 					color="primary">
 					Load worklogs
