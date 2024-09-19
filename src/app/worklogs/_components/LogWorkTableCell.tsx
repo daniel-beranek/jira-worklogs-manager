@@ -23,12 +23,15 @@ export const LogWorkTableCell = ({
 	isWeekend
 }: Readonly<{ data: Worklogs[number]; onFetchSuccess: (data: LoggedWork) => void; isWeekend: boolean }>) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [issueKey, setIssueKey] = useState<string | null>(null);
 	const [timeValue, setTimeValue] = useState(new Time(0, 0));
 
 	const handleLogWork = async () => {
-		if (!issueKey) return toast.error('No issue selected');
+		if (!issueKey)
+			return toast.error('No issue key provided, please try again selecting an issue from the dropdown');
 
+		setIsLoading(true);
 		const res = await logWork({
 			issueKeyOrId: issueKey,
 			date: data.date,
@@ -40,6 +43,7 @@ export const LogWorkTableCell = ({
 			toast.success('Worklog created');
 		}
 		if (res.status === 'error') res.errors.forEach((error) => toast.error(error));
+		setIsLoading(false);
 	};
 
 	const buttonClassnames = classNames({ 'opacity-disabled data-[hover=true]:opacity-45': isWeekend });
@@ -83,6 +87,7 @@ export const LogWorkTableCell = ({
 						</ModalBody>
 						<ModalFooter>
 							<Button
+								isLoading={isLoading}
 								color="primary"
 								onPress={handleLogWork}>
 								Submit
