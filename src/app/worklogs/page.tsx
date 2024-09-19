@@ -31,15 +31,17 @@ const WorklogsPage = () => {
 		{ key: 'logWork', label: 'LOG WORK' }
 	];
 
-	const handleLoggedWorkSuccess = (data: LoggedWork) => {
-		setWorklogs((prev) =>
-			prev.map((w) =>
-				new Date(w.date).toDateString() === new Date(data.date).toDateString()
-					? { ...w, totalTimeSpentSeconds: w.totalTimeSpentSeconds + data.timeSpentSeconds }
-					: w
-			)
-		);
-	};
+	const handleLoggedWorkSuccess = useCallback<(data: LoggedWork) => void>(
+		(data) =>
+			setWorklogs((prev) =>
+				prev.map((w) =>
+					new Date(w.date).toDateString() === new Date(data.date).toDateString()
+						? { ...w, totalTimeSpentSeconds: w.totalTimeSpentSeconds + data.timeSpentSeconds }
+						: w
+				)
+			),
+		[]
+	);
 
 	const handleWorklogsFetch = useCallback<(params: { data: Worklogs; isLoading: boolean }) => void>(
 		({ data, isLoading }) => {
