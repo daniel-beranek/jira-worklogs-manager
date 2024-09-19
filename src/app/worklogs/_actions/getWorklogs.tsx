@@ -70,8 +70,8 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 		const worklogsBufferFilteredByAuthorAndDates = worklogsBuffer.flat().filter((w) => {
 			if (!w?.author || !w.started) return false;
 			if (w.author.name !== user) return false;
-			if (new Date(w.started).getDate() < new Date(dateStart).getDate()) return false;
-			if (new Date(w.started).getDate() > new Date(dateEnd).getDate()) return false;
+			if (new Date(w.started).getTime() < new Date(dateStart).getTime()) return false;
+			if (new Date(w.started).getTime() > new Date(dateEnd).getTime()) return false;
 			return true;
 		});
 
