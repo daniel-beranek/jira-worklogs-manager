@@ -74,6 +74,7 @@ export const getWorklogs: Action<Worklogs, 'dateStart' | 'dateEnd'> = async ({ d
 			if (!w?.author || !w.started) return false;
 			if (w.author.name !== user) return false;
 			if (new Date(w.started).getTime() < new Date(dateStart).getTime()) return false;
+			// noinspection RedundantIfStatementJS
 			if (new Date(w.started).getTime() > new Date(dateEnd).getTime()) return false;
 			return true;
 		});

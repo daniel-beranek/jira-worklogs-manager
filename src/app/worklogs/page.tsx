@@ -69,7 +69,7 @@ const WorklogsPage = () => {
 					/>
 				)
 			})),
-		[worklogs]
+		[worklogs, handleLoggedWorkSuccess]
 	);
 
 	return (
