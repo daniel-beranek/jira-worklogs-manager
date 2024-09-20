@@ -3,6 +3,7 @@ import { getWorklogs, type Worklogs } from '@/app/worklogs/_actions';
 import { useEffect, useState } from 'react';
 import { useDateRange } from '@/app/worklogs/_hooks/useDateRange';
 import { toast } from 'react-hot-toast/headless';
+import { useMediaQuery } from 'react-responsive';
 
 export const TableTopContent = ({
 	onFetch
@@ -11,6 +12,8 @@ export const TableTopContent = ({
 	useEffect(() => {
 		setMounted(true);
 	}, []);
+
+	const screenSmallerThanSM = useMediaQuery({ maxWidth: 640 });
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState<Worklogs>([]);
@@ -41,7 +44,7 @@ export const TableTopContent = ({
 				<DateRangePicker
 					aria-label="Date range"
 					className="md:max-w-xs"
-					visibleMonths={2}
+					visibleMonths={screenSmallerThanSM ? 1 : 2}
 					value={dateRange}
 					onChange={setDateRange}
 				/>
