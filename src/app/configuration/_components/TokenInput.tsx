@@ -18,7 +18,7 @@ export const TokenInput = () => {
 				style={{ alignItems: description ? 'center' : 'end' }}>
 				<Input
 					type={isVisible ? 'text' : 'password'}
-					label="Token"
+					label="Jira personal token"
 					labelPlacement="outside"
 					value={value}
 					onChange={(e) => setValue(e.target.value)}
