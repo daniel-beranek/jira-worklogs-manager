@@ -27,6 +27,8 @@ const WorklogsPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { locale } = useLocale();
 
+	throw new Error('asdhsal');
+
 	const handleLoggedWorkSuccess = useCallback<(data: LoggedWork) => void>(
 		(data) =>
 			setWorklogs((prev) =>
