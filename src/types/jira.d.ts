@@ -20549,7 +20549,15 @@ export interface components {
 			 *      *  `project-unknown` Shared with a project that the user does not have access to. Cannot be set in a request.
 			 * @enum {string}
 			 */
-			type: 'user' | 'group' | 'project' | 'projectRole' | 'global' | 'loggedin' | 'authenticated' | 'project-unknown';
+			type:
+				| 'user'
+				| 'group'
+				| 'project'
+				| 'projectRole'
+				| 'global'
+				| 'loggedin'
+				| 'authenticated'
+				| 'project-unknown';
 			/** @description The user account ID that the filter is shared with. For a request, specify the `accountId` property for the user. */
 			user?: components['schemas']['UserBean'];
 		};
@@ -22142,7 +22150,9 @@ export interface components {
 			operator: 'AND' | 'OR';
 		};
 		/** @description The workflow transition rule conditions tree. */
-		WorkflowCondition: components['schemas']['WorkflowSimpleCondition'] | components['schemas']['WorkflowCompoundCondition'];
+		WorkflowCondition:
+			| components['schemas']['WorkflowSimpleCondition']
+			| components['schemas']['WorkflowCompoundCondition'];
 		/** @description The details of the workflows to create. */
 		WorkflowCreate: {
 			/** @description The description of the workflow to create. */
@@ -49672,7 +49682,16 @@ export interface operations {
 				 *      *  `name` Sorts by workflow name.
 				 *      *  `created` Sorts by create time.
 				 *      *  `updated` Sorts by update time. */
-				orderBy?: 'name' | '-name' | '+name' | 'created' | '-created' | '+created' | 'updated' | '+updated' | '-updated';
+				orderBy?:
+					| 'name'
+					| '-name'
+					| '+name'
+					| 'created'
+					| '-created'
+					| '+created'
+					| 'updated'
+					| '+updated'
+					| '-updated';
 				/** @description Filters active and inactive workflows. */
 				isActive?: boolean;
 			};
