@@ -8,8 +8,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"generate-jira-types": "openapi-typescript https://dac-static.atlassian.com/cloud/jira/platform/swagger.v3.json -o src/types/jira.d.ts",
-		"check-for-circular-dependencies": "ds"
+		"generate-jira-types": "openapi-typescript https://dac-static.atlassian.com/cloud/jira/platform/swagger.v3.json -o src/types/jira.d.ts"
 	},
 	"dependencies": {
 		"@nextui-org/react": "^2.4.8",
@@ -33,7 +32,6 @@
 		"@types/node": "^20.16.5",
 		"@types/react": "^18.3.8",
 		"@types/react-dom": "^18.3.0",
-		"circular-dependency-scanner": "^2.3.0",
 		"eslint": "^8.57.1",
 		"eslint-config-next": "14.2.6",
 		"openapi-typescript": "^7.4.1",

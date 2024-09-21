@@ -11,14 +11,13 @@ import {
 	Skeleton
 } from '@nextui-org/react';
 import { useState, useMemo, useCallback } from 'react';
-import {
-	DateTableCell,
-	TimeSpentTableCell,
-	IssuesTableCell,
-	LogWorkTableCell,
-	TableTopContent
-} from '@/app/worklogs/_components';
-import { LoggedWork, Worklogs } from '@/app/worklogs/_actions';
+import { DateTableCell } from '@/app/worklogs/_components/DateTableCell';
+import { TimeSpentTableCell } from '@/app/worklogs/_components/TimeSpentTableCell';
+import { IssuesTableCell } from '@/app/worklogs/_components/IssuesTableCell';
+import { LogWorkTableCell } from '@/app/worklogs/_components/LogWorkTableCell';
+import { TableTopContent } from '@/app/worklogs/_components/TableTopContent';
+import { Worklogs } from '@/app/worklogs/_actions/getWorklogs';
+import { LoggedWork } from '@/app/worklogs/_actions/logWork';
 import { isWeekend as getIsWeekend, CalendarDate } from '@internationalized/date';
 import { useLocale } from '@react-aria/i18n';
 
