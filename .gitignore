@@ -43,3 +43,4 @@ bun.lockb
 
 # env files
 .env
+.env.sentry-build-plugin
