@@ -54,10 +54,7 @@ export const TableTopContent = ({
 					variant="flat">
 					<Button
 						color={selectedDateRange === 'today' ? 'primary' : 'default'}
-						onClick={() => {
-							throw new Error('asdhsal');
-							setDateRange('today');
-						}}>
+						onClick={() => setDateRange('today')}>
 						Today
 					</Button>
 					<Button
