@@ -96,7 +96,7 @@ const WorklogsPage = () => {
 			})),
 		[worklogs, handleLoggedWorkSuccess, disabledRows]
 	);
-	throw new Error('asdhsal');
+
 	return (
 		<Table
 			shadow="md"
