@@ -6,7 +6,7 @@ export default withSentryConfig(nextConfig, {
 	// https://github.com/getsentry/sentry-webpack-plugin#options
 
 	org: 'my-org-fr',
-	project: 'javascript-nextjs',
+	project: 'jira-worklogs-manager',
 	sentryUrl: 'https://sentry.io/',
 
 	// Only print logs for uploading source maps in CI
