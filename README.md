@@ -10,7 +10,7 @@ Simple application allowing you to add and review your Jira worklogs.
 ## How to use:
 
 ### Official website:
-Open [website](https://jira-worklogs-manager.netlify.app/) and fill in the configuration page.
+Open the [website](https://jira-worklogs-manager.netlify.app/) in your browser, fill in the configuration page and start using it out of the box.
 
 ### Run locally:
 1. Fork this repository.
@@ -35,6 +35,6 @@ bun dev
 6. Fill in the configuration page and you can start using the app.
 
 ## Contribution:
-For contributions, you can fork this repository, follow how to use section and later submit a pull request.
+For contributions, please fork this repository, follow how to use section of this readme and later submit a pull request.
 
 You can also open an issue or discussion in case of any questions.
