@@ -5,11 +5,11 @@ import { useCookieInput } from '@/app/configuration/_hooks/useCookieInput';
 import { InfoIcon } from '@nextui-org/shared-icons';
 
 export const UserInput = () => {
-	const { mounted, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('user');
+	const { isLoaded, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('user');
 
 	return (
 		<Skeleton
-			isLoaded={mounted}
+			isLoaded={isLoaded}
 			className="rounded-lg">
 			<div
 				className="flex gap-2"

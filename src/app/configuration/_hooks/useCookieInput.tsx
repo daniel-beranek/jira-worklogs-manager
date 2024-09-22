@@ -5,15 +5,11 @@ import { setEncryptedCookie } from '@/lib/actions/setEncryptedCookie';
 import { toast } from 'react-hot-toast/headless';
 
 export const useCookieInput = (name: string) => {
-	const [mounted, setMounted] = useState(false);
+	const [isLoaded, setIsLoaded] = useState(false);
 	const [value, setValue] = useState('');
 	const [description, setDescription] = useState('');
 	const [isProcessingValue, setIsProcessingValue] = useState(false);
 	const [debouncedValue, isDebouncingValue] = useDebounce(value);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
 
 	useEffect(() => {
 		(async () => {
@@ -23,15 +19,20 @@ export const useCookieInput = (name: string) => {
 	}, [name]);
 
 	useEffect(() => {
-		if (isDebouncingValue) setIsProcessingValue(true);
-		else if (debouncedValue !== null)
-			(async () => {
-				const cookieRes = await getDecryptedCookie({ name });
-				if (cookieRes.status === 'success' && cookieRes.data === debouncedValue) setDescription('');
-				else setDescription('Value not stored.');
-				setIsProcessingValue(false);
-			})();
-	}, [debouncedValue, isDebouncingValue, name]);
+		(async () => {
+			setIsProcessingValue(true);
+			if (isDebouncingValue || debouncedValue === null) return;
+
+			const cookieRes = await getDecryptedCookie({ name });
+			if (cookieRes.status !== 'success') setIsLoaded(true);
+			else if (cookieRes.data === debouncedValue) {
+				setIsLoaded(true);
+				setDescription('');
+			} else if (isLoaded) setDescription('Value not stored');
+
+			setIsProcessingValue(false);
+		})();
+	}, [isLoaded, debouncedValue, isDebouncingValue, name]);
 
 	const handleSubmit = async (value: string) => {
 		await setEncryptedCookie({ name, value });
@@ -51,7 +52,7 @@ export const useCookieInput = (name: string) => {
 	};
 
 	return {
-		mounted,
+		isLoaded,
 		value,
 		setValue,
 		description,
