@@ -1,5 +1,5 @@
 'use server';
-import { getMultipleDecryptedCookies } from '@/lib/actions';
+import { getMultipleDecryptedCookies } from '@/lib/actions/getMultipleDecryptedCookies';
 import { Action, JiraData } from '@/types/types';
 
 export type IssuePickerSections = NonNullable<JiraData<'getIssuePickerResource'>['sections']>;

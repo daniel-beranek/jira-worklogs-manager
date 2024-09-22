@@ -1,5 +1,8 @@
 import { Card, CardBody, Kbd, CardFooter, Spacer } from '@nextui-org/react';
-import { CountryAutocomplete, TokenInput, UrlInput, UserInput } from '@/app/configuration/_components';
+import { UrlInput } from './_components/UrlInput';
+import { UserInput } from './_components/UserInput';
+import { TokenInput } from './_components/TokenInput';
+import { CountryAutocomplete } from './_components/CountryAutocomplete';
 
 const ConfigurationPage = () => {
 	return (

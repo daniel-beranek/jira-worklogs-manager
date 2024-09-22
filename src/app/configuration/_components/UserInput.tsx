@@ -5,18 +5,18 @@ import { useCookieInput } from '@/app/configuration/_hooks/useCookieInput';
 import { InfoIcon } from '@nextui-org/shared-icons';
 
 export const UserInput = () => {
-	const { mounted, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('user');
+	const { isLoaded, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('user');
 
 	return (
 		<Skeleton
-			isLoaded={mounted}
+			isLoaded={isLoaded}
 			className="rounded-lg">
 			<div
 				className="flex gap-2"
 				style={{ alignItems: description ? 'center' : 'end' }}>
 				<Input
 					type="text"
-					label="User"
+					label="Jira username"
 					labelPlacement="outside"
 					value={value}
 					onChange={(e) => setValue(e.target.value)}

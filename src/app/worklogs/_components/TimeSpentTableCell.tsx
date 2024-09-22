@@ -1,4 +1,4 @@
-import { Worklogs } from '@/app/worklogs/_actions';
+import { Worklogs } from '@/app/worklogs/_actions/getWorklogs';
 import { Progress } from '@nextui-org/react';
 import { useMemo } from 'react';
 import { useLocale } from '@react-aria/i18n';

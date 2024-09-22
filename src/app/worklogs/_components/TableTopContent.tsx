@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, DateRangePicker, Skeleton } from '@nextui-org/react';
-import { getWorklogs, type Worklogs } from '@/app/worklogs/_actions';
+import { getWorklogs, type Worklogs } from '@/app/worklogs/_actions/getWorklogs';
 import { useEffect, useState } from 'react';
 import { useDateRange } from '@/app/worklogs/_hooks/useDateRange';
 import { toast } from 'react-hot-toast/headless';

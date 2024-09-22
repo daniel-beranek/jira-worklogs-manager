@@ -6,19 +6,19 @@ import { EyeFilledIcon, EyeSlashFilledIcon, InfoIcon } from '@nextui-org/shared-
 import { useState } from 'react';
 
 export const TokenInput = () => {
-	const { mounted, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('token');
+	const { isLoaded, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('token');
 	const [isVisible, setIsVisible] = useState(false);
 
 	return (
 		<Skeleton
-			isLoaded={mounted}
+			isLoaded={isLoaded}
 			className="rounded-lg">
 			<div
 				className="flex gap-2"
 				style={{ alignItems: description ? 'center' : 'end' }}>
 				<Input
 					type={isVisible ? 'text' : 'password'}
-					label="Token"
+					label="Jira personal token"
 					labelPlacement="outside"
 					value={value}
 					onChange={(e) => setValue(e.target.value)}

@@ -3,7 +3,7 @@
 import { NextUIProvider } from '@nextui-org/react';
 import { type ReactNode, useEffect } from 'react';
 import { I18nProvider } from '@react-aria/i18n';
-import { useLocalStorage } from '@/lib/hooks';
+import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { ThemeProvider } from 'next-themes';
 
 const AppProviders = ({ children }: Readonly<{ children: ReactNode }>) => {

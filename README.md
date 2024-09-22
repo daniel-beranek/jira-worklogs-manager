@@ -1,9 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Jira Worklogs Manager
 
-## Getting Started
+Simple application allowing you to add and review your Jira worklogs.
 
-First, run the development server:
+## Core features:
 
+- Quickly review your worklogs for selected date
+- Log work to an issue
+
+## How to use:
+
+### Official website:
+Open [website](https://jira-worklogs-manager.netlify.app/) and fill in the configuration page.
+
+### Run locally:
+1. Fork this repository.
+2. Install dependencies.
+3. Set environment variables in your .env file.
+```bash
+COOKIE_SECRET="{Fill this with a random string}"
+API_VERSION="{Specify Jira API version number you want to use, currently used version is '2'}"
+```
+4. Run development server.
 ```bash
 npm run dev
 # or
@@ -14,23 +31,10 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3333](http://localhost:3333) with your browser.
+6. Fill in the configuration page and you can start using the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contribution:
+For contributions, you can fork this repository, follow how to use section and later submit a pull request.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+You can also open an issue or discussion in case of any questions.

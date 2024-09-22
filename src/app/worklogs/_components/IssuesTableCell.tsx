@@ -1,7 +1,7 @@
 import { Button, Divider, Link, Popover, PopoverContent, PopoverTrigger, ScrollShadow } from '@nextui-org/react';
 import { remark } from 'remark';
 import html from 'remark-html';
-import { Worklogs } from '@/app/worklogs/_actions';
+import { Worklogs } from '@/app/worklogs/_actions/getWorklogs';
 import classNames from 'classnames';
 
 export const IssuesTableCell = ({ data, isWeekend }: Readonly<{ data: Worklogs[number]; isWeekend: boolean }>) => {

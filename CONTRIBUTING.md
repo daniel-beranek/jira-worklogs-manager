@@ -1,0 +1,1 @@
+Dear contributor, thank you for considering making this application better. You can simply fork this repository and open a pull request once you are done. Please check the root readme file for more information.

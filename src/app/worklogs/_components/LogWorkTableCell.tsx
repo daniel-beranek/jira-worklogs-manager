@@ -10,7 +10,8 @@ import {
 	DateInput
 } from '@nextui-org/react';
 
-import { LoggedWork, logWork, Worklogs } from '@/app/worklogs/_actions';
+import { LoggedWork, logWork } from '@/app/worklogs/_actions/logWork';
+import { Worklogs } from '@/app/worklogs/_actions/getWorklogs';
 import { useState } from 'react';
 import { parseDate, Time } from '@internationalized/date';
 import { toast } from 'react-hot-toast/headless';

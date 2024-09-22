@@ -1,7 +1,7 @@
 import { Autocomplete, AutocompleteItem, AutocompleteSection } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { IssuePickerSections, searchIssues } from '@/app/worklogs/_actions/searchIssues';
-import { useDebounce } from '@/lib/hooks';
+import { useDebounce } from '@/lib/hooks/useDebounce';
 import { toast } from 'react-hot-toast/headless';
 
 export const IssuesAutocomplete = ({ onSelectionChange }: Readonly<{ onSelectionChange: (key: string) => void }>) => {
