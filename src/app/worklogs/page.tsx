@@ -127,7 +127,7 @@ const WorklogsPage = () => {
 			<TableBody
 				items={rows}
 				isLoading={isLoading}
-				loadingContent={<Skeleton className="h-full w-full" />}
+				loadingContent={<Skeleton className="absolute inset-0" />}
 				emptyContent="Click 'Load worklogs'">
 				{(item) => (
 					<TableRow key={item.key}>
