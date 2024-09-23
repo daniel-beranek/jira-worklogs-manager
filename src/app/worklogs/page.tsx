@@ -20,6 +20,7 @@ import { Worklogs } from '@/app/worklogs/_actions/getWorklogs';
 import { LoggedWork } from '@/app/worklogs/_actions/logWork';
 import { isWeekend as getIsWeekend, CalendarDate } from '@internationalized/date';
 import { useLocale } from '@react-aria/i18n';
+import { ColumnSize } from '@react-types/table';
 
 const WorklogsPage = () => {
 	const [worklogs, setWorklogs] = useState<Worklogs>([]);
@@ -73,6 +74,21 @@ const WorklogsPage = () => {
 		{ key: 'logWork', label: 'LOG WORK' }
 	];
 
+	const getColumnWidth = useCallback<(key: string) => ColumnSize | undefined>((key) => {
+		switch (key) {
+			case 'date':
+				return '300';
+			case 'timeSpent':
+				return '400';
+			case 'issues':
+				return '500';
+			case 'logWork':
+				return '100';
+			default:
+				return undefined;
+		}
+	}, []);
+
 	const rows = useMemo(
 		() =>
 			worklogs.map((w) => ({
@@ -108,17 +124,7 @@ const WorklogsPage = () => {
 				{(column) => (
 					<TableColumn
 						align={column.key === 'date' ? 'start' : 'center'}
-						width={
-							column.key === 'date'
-								? '300'
-								: column.key === 'timeSpent'
-									? '400'
-									: column.key === 'issues'
-										? '500'
-										: column.key === 'logWork'
-											? '100'
-											: undefined
-						}
+						width={getColumnWidth(column.key)}
 						key={column.key}>
 						{column.label}
 					</TableColumn>
@@ -127,7 +133,7 @@ const WorklogsPage = () => {
 			<TableBody
 				items={rows}
 				isLoading={isLoading}
-				loadingContent={<Skeleton className="h-full w-full" />}
+				loadingContent={<Skeleton className="absolute inset-0" />}
 				emptyContent="Click 'Load worklogs'">
 				{(item) => (
 					<TableRow key={item.key}>

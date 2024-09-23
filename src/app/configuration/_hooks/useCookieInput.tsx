@@ -24,12 +24,15 @@ export const useCookieInput = (name: string) => {
 			if (isDebouncingValue || debouncedValue === null) return;
 
 			const cookieRes = await getDecryptedCookie({ name });
-			if (cookieRes.status !== 'success') setIsLoaded(true);
-			else if (cookieRes.data === debouncedValue) {
+			if (cookieRes.status !== 'success') {
+				setIsLoaded(true);
+				setDescription('No stored value found');
+			} else if (cookieRes.data === debouncedValue) {
 				setIsLoaded(true);
 				setDescription('');
 			} else if (isLoaded) setDescription('Value not stored');
 
+			console.log(cookieRes);
 			setIsProcessingValue(false);
 		})();
 	}, [isLoaded, debouncedValue, isDebouncingValue, name]);
