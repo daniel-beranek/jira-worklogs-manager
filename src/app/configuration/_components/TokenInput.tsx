@@ -6,7 +6,8 @@ import { EyeFilledIcon, EyeSlashFilledIcon, InfoIcon } from '@nextui-org/shared-
 import { useState } from 'react';
 
 export const TokenInput = () => {
-	const { isLoaded, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('token');
+	const { isLoaded, value, setValue, description, isProcessingValue, isProcessingSubmit, handleSubmit } =
+		useCookieInput('token');
 	const [isVisible, setIsVisible] = useState(false);
 
 	return (
@@ -22,7 +23,7 @@ export const TokenInput = () => {
 					labelPlacement="outside"
 					value={value}
 					onChange={(e) => setValue(e.target.value)}
-					onKeyDown={(e) => description && e.key === 'Enter' && handleSubmit(value)}
+					onKeyDown={(e) => !isProcessingSubmit && description && e.key === 'Enter' && handleSubmit(value)}
 					description={
 						description && (
 							<span className="flex items-center gap-1">
@@ -57,6 +58,7 @@ export const TokenInput = () => {
 				<Button
 					onClick={() => handleSubmit(value)}
 					isDisabled={!description}
+					isLoading={isProcessingSubmit}
 					color="primary">
 					Submit
 				</Button>

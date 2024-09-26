@@ -5,7 +5,8 @@ import { useCookieInput } from '@/app/configuration/_hooks/useCookieInput';
 import { InfoIcon } from '@nextui-org/shared-icons';
 
 export const UserInput = () => {
-	const { isLoaded, value, setValue, description, isProcessingValue, handleSubmit } = useCookieInput('user');
+	const { isLoaded, value, setValue, description, isProcessingValue, isProcessingSubmit, handleSubmit } =
+		useCookieInput('user');
 
 	return (
 		<Skeleton
@@ -20,7 +21,7 @@ export const UserInput = () => {
 					labelPlacement="outside"
 					value={value}
 					onChange={(e) => setValue(e.target.value)}
-					onKeyDown={(e) => description && e.key === 'Enter' && handleSubmit(value)}
+					onKeyDown={(e) => !isProcessingSubmit && description && e.key === 'Enter' && handleSubmit(value)}
 					description={
 						description && (
 							<span className="flex items-center gap-1">
@@ -42,6 +43,7 @@ export const UserInput = () => {
 				<Button
 					onClick={() => handleSubmit(value)}
 					isDisabled={!description}
+					isLoading={isProcessingSubmit}
 					color="primary">
 					Submit
 				</Button>
