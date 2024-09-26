@@ -1,6 +1,64 @@
 import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+	redirects: async () => {
+		return [
+			{
+				source: '/',
+				has: [
+					{
+						type: 'cookie',
+						key: 'url'
+					},
+					{
+						type: 'cookie',
+						key: 'user'
+					},
+					{
+						type: 'cookie',
+						key: 'token'
+					}
+				],
+				destination: '/worklogs',
+				permanent: false
+			},
+			{
+				source: '/',
+				missing: [
+					{
+						type: 'cookie',
+						key: 'url'
+					}
+				],
+				destination: '/configuration',
+				permanent: false
+			},
+			{
+				source: '/',
+				missing: [
+					{
+						type: 'cookie',
+						key: 'user'
+					}
+				],
+				destination: '/configuration',
+				permanent: false
+			},
+			{
+				source: '/',
+				missing: [
+					{
+						type: 'cookie',
+						key: 'token'
+					}
+				],
+				destination: '/configuration',
+				permanent: false
+			}
+		];
+	}
+};
+
 export default withSentryConfig(nextConfig, {
 	// For all available options, see:
 	// https://github.com/getsentry/sentry-webpack-plugin#options
