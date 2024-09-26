@@ -37,9 +37,13 @@ export const useCookieInput = (name: string) => {
 	}, [isLoaded, debouncedValue, isDebouncingValue, name]);
 
 	const handleSubmit = async (value: string) => {
+		setDescription('');
+
 		await setEncryptedCookie({ name, value });
 		const res = await getDecryptedCookie({ name });
+
 		if (res.status === 'error') {
+			setDescription('Value not stored');
 			toast.error(
 				<p>
 					Couldn&apos;t store value{value && <strong> {value}</strong>}, please make sure you have cookies
@@ -48,7 +52,6 @@ export const useCookieInput = (name: string) => {
 			);
 		}
 		if (res.status === 'success' && res.data === value) {
-			setDescription('');
 			toast.success(<p>Value{value && <strong> {value}</strong>} stored successfully.</p>);
 		}
 	};
