@@ -32,7 +32,6 @@ export const useCookieInput = (name: string) => {
 				setDescription('');
 			} else if (isLoaded) setDescription('Value not stored');
 
-			console.log(cookieRes);
 			setIsProcessingValue(false);
 		})();
 	}, [isLoaded, debouncedValue, isDebouncingValue, name]);
