@@ -1,3 +1,4 @@
+[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v3/monitor/1kwhy.svg)](https://uptime.betterstack.com/?utm_source=status_badge)
 # Jira Worklogs Manager
 
 Simple application allowing you to add and review your Jira worklogs.
